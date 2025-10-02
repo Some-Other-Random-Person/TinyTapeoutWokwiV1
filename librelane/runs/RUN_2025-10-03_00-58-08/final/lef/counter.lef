@@ -1,0 +1,174 @@
+VERSION 5.7 ;
+  NOWIREEXTENSIONATPIN ON ;
+  DIVIDERCHAR "/" ;
+  BUSBITCHARS "[]" ;
+MACRO counter
+  CLASS BLOCK ;
+  FOREIGN counter ;
+  ORIGIN 0.000 0.000 ;
+  SIZE 160.000 BY 100.000 ;
+  PIN VGND
+    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER met4 ;
+        RECT 21.580 2.480 23.180 95.440 ;
+    END
+    PORT
+      LAYER met4 ;
+        RECT 60.450 2.480 62.050 95.440 ;
+    END
+    PORT
+      LAYER met4 ;
+        RECT 99.320 2.480 100.920 95.440 ;
+    END
+    PORT
+      LAYER met4 ;
+        RECT 138.190 2.480 139.790 95.440 ;
+    END
+  END VGND
+  PIN VPWR
+    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER met4 ;
+        RECT 18.280 2.480 19.880 95.440 ;
+    END
+    PORT
+      LAYER met4 ;
+        RECT 57.150 2.480 58.750 95.440 ;
+    END
+    PORT
+      LAYER met4 ;
+        RECT 96.020 2.480 97.620 95.440 ;
+    END
+    PORT
+      LAYER met4 ;
+        RECT 134.890 2.480 136.490 95.440 ;
+    END
+  END VPWR
+  PIN clk_i
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.852000 ;
+    PORT
+      LAYER met2 ;
+        RECT 70.930 0.000 71.210 2.000 ;
+    END
+  END clk_i
+  PIN counter_val_o[0]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 1.120500 ;
+    ANTENNADIFFAREA 0.891000 ;
+    PORT
+      LAYER met2 ;
+        RECT 74.150 0.000 74.430 2.000 ;
+    END
+  END counter_val_o[0]
+  PIN counter_val_o[1]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.994500 ;
+    ANTENNADIFFAREA 0.891000 ;
+    PORT
+      LAYER met2 ;
+        RECT 80.590 0.000 80.870 2.000 ;
+    END
+  END counter_val_o[1]
+  PIN counter_val_o[2]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.499500 ;
+    ANTENNADIFFAREA 0.891000 ;
+    PORT
+      LAYER met2 ;
+        RECT 83.810 0.000 84.090 2.000 ;
+    END
+  END counter_val_o[2]
+  PIN counter_val_o[3]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.373500 ;
+    ANTENNADIFFAREA 0.445500 ;
+    PORT
+      LAYER met2 ;
+        RECT 87.030 0.000 87.310 2.000 ;
+    END
+  END counter_val_o[3]
+  PIN counter_val_o[4]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.868500 ;
+    ANTENNADIFFAREA 0.891000 ;
+    PORT
+      LAYER met2 ;
+        RECT 83.810 98.000 84.090 100.000 ;
+    END
+  END counter_val_o[4]
+  PIN counter_val_o[5]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.373500 ;
+    ANTENNADIFFAREA 0.445500 ;
+    PORT
+      LAYER met2 ;
+        RECT 87.030 98.000 87.310 100.000 ;
+    END
+  END counter_val_o[5]
+  PIN counter_val_o[6]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.990000 ;
+    ANTENNADIFFAREA 0.891000 ;
+    PORT
+      LAYER met2 ;
+        RECT 70.930 98.000 71.210 100.000 ;
+    END
+  END counter_val_o[6]
+  PIN counter_val_o[7]
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.495000 ;
+    ANTENNADIFFAREA 0.445500 ;
+    PORT
+      LAYER met2 ;
+        RECT 74.150 98.000 74.430 100.000 ;
+    END
+  END counter_val_o[7]
+  PIN rst_i
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.159000 ;
+    PORT
+      LAYER met2 ;
+        RECT 77.370 0.000 77.650 2.000 ;
+    END
+  END rst_i
+  OBS
+      LAYER nwell ;
+        RECT 2.570 2.635 157.050 95.285 ;
+      LAYER li1 ;
+        RECT 2.760 2.635 156.860 95.285 ;
+      LAYER met1 ;
+        RECT 2.760 2.080 156.860 95.840 ;
+      LAYER met2 ;
+        RECT 18.310 97.720 70.650 98.330 ;
+        RECT 71.490 97.720 73.870 98.330 ;
+        RECT 74.710 97.720 83.530 98.330 ;
+        RECT 84.370 97.720 86.750 98.330 ;
+        RECT 87.590 97.720 139.760 98.330 ;
+        RECT 18.310 2.280 139.760 97.720 ;
+        RECT 18.310 2.000 70.650 2.280 ;
+        RECT 71.490 2.000 73.870 2.280 ;
+        RECT 74.710 2.000 77.090 2.280 ;
+        RECT 77.930 2.000 80.310 2.280 ;
+        RECT 81.150 2.000 83.530 2.280 ;
+        RECT 84.370 2.000 86.750 2.280 ;
+        RECT 87.590 2.000 139.760 2.280 ;
+      LAYER met3 ;
+        RECT 18.290 2.555 139.780 95.365 ;
+  END
+END counter
+END LIBRARY
+
