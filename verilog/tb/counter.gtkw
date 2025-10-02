@@ -1,0 +1,25 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Thu Oct  2 13:19:59 2025
+[*]
+[dumpfile] "/foss/designs/kvic_336007_ws25/verilog/tb/counter_tb.vcd"
+[dumpfile_mtime] "Thu Oct  2 13:18:59 2025"
+[dumpfile_size] 1336
+[savefile] "/foss/designs/kvic_336007_ws25/verilog/tb/counter.gtkw"
+[timestart] 0
+[size] 1641 733
+[pos] -1 -1
+*-5.604173 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[treeopen] counter_tb.
+[sst_width] 297
+[signals_width] 126
+[sst_expanded] 1
+[sst_vpaned_height] 196
+@420
+counter_tb.BW
+@28
+counter_tb.clk_i
+counter_tb.rst_i
+counter_tb.cnt_val[2:0]
+[pattern_trace] 1
+[pattern_trace] 0
