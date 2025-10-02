@@ -21,7 +21,7 @@ module counter
 	reg [BW-1:0] counter_val;
 	
 	// gets active always when a positive edge of the clock signal occours
-	always @(posedge clk_i) begin 
+	always @(posedge clk_i) begin
 		if (rst_i == 1'b1) begin
 			// if reset is enabled
 			counter_val <= {BW{1'b0}}; //reset the counter value
