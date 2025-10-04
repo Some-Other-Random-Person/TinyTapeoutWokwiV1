@@ -19,10 +19,10 @@ RTL=${RTL:-../src}
 SRC_FOLDER=${SRC_FOLDER:-.}
 
 echo -e "${GREEN}Verilator:------------------------------------------ ${NC}"
-verilator --lint-only "$RTL"/"$name".v
+verilator --lint-only -I"$RTL" "$RTL"/"$name".v # -I"$RTL" for multiple Verilog file dependencies in "src" folder
 
 echo -e "${GREEN}IVerilog:------------------------------------------- ${NC}"
-iverilog -g2005 "$RTL"/"$name".v "$SRC_FOLDER"/"$name"_tb.v
+iverilog -g2005 -I"$RTL" "$RTL/$name.v" "$SRC_FOLDER/${name}_tb.v" # -I"$RTL" for multiple Verilog file dependencies in "src" folder
 
 echo -e "${GREEN}a:-------------------------------------------------- ${NC}"
 ./a.out
