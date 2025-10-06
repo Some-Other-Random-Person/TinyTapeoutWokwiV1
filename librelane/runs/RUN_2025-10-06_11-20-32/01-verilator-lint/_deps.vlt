@@ -1,0 +1,5 @@
+`verilator_config
+lint_off -rule DECLFILENAME
+lint_off -rule EOFNEWLINE
+lint_off -rule UNDRIVEN -file "/foss/designs/kvic_336007_ws25/librelane/runs/RUN_2025-10-06_11-20-32/tmp/f8adb5465c3f42ea9dd798c0a9d2b1ac.bb.v"
+lint_off -rule UNUSEDSIGNAL -file "/foss/designs/kvic_336007_ws25/librelane/runs/RUN_2025-10-06_11-20-32/tmp/f8adb5465c3f42ea9dd798c0a9d2b1ac.bb.v"

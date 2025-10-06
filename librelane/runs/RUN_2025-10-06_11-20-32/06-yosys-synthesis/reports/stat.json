@@ -1,0 +1,57 @@
+{
+   "creator": "Yosys 0.57 (git sha1 3aca86049, g++ 13.3.0-6ubuntu2~24.04 -fPIC -O3)",
+   "invocation": "stat -json -liberty /foss/designs/kvic_336007_ws25/librelane/runs/RUN_2025-10-06_11-20-32/tmp/087fb9ff528a40ec9435e4e869c51f89.lib ",
+   "modules": {
+      "\\counter": {
+         "num_wires":         22,
+         "num_wire_bits":     29,
+         "num_pub_wires":     3,
+         "num_pub_wire_bits": 10,
+         "num_ports":         3,
+         "num_port_bits":     10,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         27,
+         "num_submodules":       0,
+         "area":              330.316800,
+         "sequential_area":    170.163200,
+         "num_cells_by_type": {
+            "sky130_fd_sc_hd__a21oi_2": 6,
+            "sky130_fd_sc_hd__a31o_2": 1,
+            "sky130_fd_sc_hd__and3_2": 2,
+            "sky130_fd_sc_hd__and4_2": 1,
+            "sky130_fd_sc_hd__dfxtp_2": 8,
+            "sky130_fd_sc_hd__nor2_2": 3,
+            "sky130_fd_sc_hd__nor3_2": 2,
+            "sky130_fd_sc_hd__o21a_2": 4
+         }
+      }
+   },
+      "design": {
+         "num_wires":         22,
+         "num_wire_bits":     29,
+         "num_pub_wires":     3,
+         "num_pub_wire_bits": 10,
+         "num_ports":         3,
+         "num_port_bits":     10,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         27,
+         "num_submodules":       0,
+         "area":              330.316800,
+         "sequential_area":    170.163200,
+         "num_cells_by_type": {
+            "sky130_fd_sc_hd__a21oi_2": 6,
+            "sky130_fd_sc_hd__a31o_2": 1,
+            "sky130_fd_sc_hd__and3_2": 2,
+            "sky130_fd_sc_hd__and4_2": 1,
+            "sky130_fd_sc_hd__dfxtp_2": 8,
+            "sky130_fd_sc_hd__nor2_2": 3,
+            "sky130_fd_sc_hd__nor3_2": 2,
+            "sky130_fd_sc_hd__o21a_2": 4
+         }
+      }
+}
+
