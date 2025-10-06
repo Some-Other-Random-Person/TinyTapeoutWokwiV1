@@ -1,0 +1,161 @@
+
+===========================================================================
+report_checks -unconstrained
+===========================================================================
+======================= nom_ss_100C_1v60 Corner ===================================
+
+Startpoint: _43_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: uo_out[0] (output port clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout         Cap        Slew       Delay        Time   Description
+---------------------------------------------------------------------------------------------
+                      0.150000    0.000000    0.000000   clock clk (rise edge)
+                                  0.000000    0.000000   clock network delay (ideal)
+                      0.150000    0.000000    0.000000 ^ _43_/CLK (sky130_fd_sc_hd__dfxtp_2)
+     8    0.055424    0.447513    0.973567    0.973567 ^ _43_/Q (sky130_fd_sc_hd__dfxtp_2)
+                                                         uo_out[0] (net)
+                      0.447513    0.000000    0.973567 ^ uo_out[0] (out)
+                                              0.973567   data arrival time
+
+                      0.150000   20.000000   20.000000   clock clk (rise edge)
+                                  0.000000   20.000000   clock network delay (ideal)
+                                 -0.250000   19.750002   clock uncertainty
+                                  0.000000   19.750002   clock reconvergence pessimism
+                                 -4.000000   15.750001   output external delay
+                                             15.750001   data required time
+---------------------------------------------------------------------------------------------
+                                             15.750001   data required time
+                                             -0.973567   data arrival time
+---------------------------------------------------------------------------------------------
+                                             14.776434   slack (MET)
+
+
+
+
+===========================================================================
+report_checks --slack_max -0.01
+============================================================================
+======================= nom_ss_100C_1v60 Corner ===================================
+
+No paths found.
+
+
+===========================================================================
+ report_check_types -max_slew -max_cap -max_fanout -violators
+============================================================================
+======================= nom_ss_100C_1v60 Corner ===================================
+
+
+
+===========================================================================
+report_parasitic_annotation -report_unannotated
+============================================================================
+Found 78 unannotated drivers.
+ clk
+ ena
+ rst_n
+ ui_in[0]
+ ui_in[1]
+ ui_in[2]
+ ui_in[3]
+ ui_in[4]
+ ui_in[5]
+ ui_in[6]
+ ui_in[7]
+ uio_in[0]
+ uio_in[1]
+ uio_in[2]
+ uio_in[3]
+ uio_in[4]
+ uio_in[5]
+ uio_in[6]
+ uio_in[7]
+ _19_/Y
+ _20_/X
+ _21_/X
+ _22_/X
+ _23_/Y
+ _24_/Y
+ _25_/X
+ _26_/X
+ _27_/X
+ _28_/X
+ _29_/X
+ _30_/X
+ _31_/Y
+ _32_/Y
+ _33_/X
+ _34_/Y
+ _35_/Y
+ _36_/X
+ _37_/X
+ _38_/Q
+ _39_/Q
+ _40_/Q
+ _41_/Q
+ _42_/Q
+ _43_/Q
+ _44_/Q
+ _45_/Q
+ _46_/HI
+ _46_/LO
+ _47_/HI
+ _47_/LO
+ _48_/HI
+ _48_/LO
+ _49_/HI
+ _49_/LO
+ _50_/HI
+ _50_/LO
+ _51_/HI
+ _51_/LO
+ _52_/HI
+ _52_/LO
+ _53_/HI
+ _53_/LO
+ _54_/HI
+ _54_/LO
+ _55_/HI
+ _55_/LO
+ _56_/HI
+ _56_/LO
+ _57_/HI
+ _57_/LO
+ _58_/HI
+ _58_/LO
+ _59_/HI
+ _59_/LO
+ _60_/HI
+ _60_/LO
+ _61_/HI
+ _61_/LO
+Found 0 partially unannotated drivers.
+
+===========================================================================
+max slew violation count 0
+max fanout violation count 0
+max cap violation count 0
+============================================================================
+
+===========================================================================
+check_setup -verbose -unconstrained_endpoints -multiple_clock -no_clock -no_input_delay -loops -generated_clocks
+===========================================================================
+Warning: There are 16 unconstrained endpoints.
+  uio_oe[0]
+  uio_oe[1]
+  uio_oe[2]
+  uio_oe[3]
+  uio_oe[4]
+  uio_oe[5]
+  uio_oe[6]
+  uio_oe[7]
+  uio_out[0]
+  uio_out[1]
+  uio_out[2]
+  uio_out[3]
+  uio_out[4]
+  uio_out[5]
+  uio_out[6]
+  uio_out[7]

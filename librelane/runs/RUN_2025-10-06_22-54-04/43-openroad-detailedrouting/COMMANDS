@@ -1,0 +1,1 @@
+openroad -exit -no_splash -metrics /foss/designs/kvic_336007_ws25/librelane/runs/RUN_2025-10-06_22-54-04/43-openroad-detailedrouting/or_metrics_out.json /usr/local/lib/python3.12/dist-packages/librelane/scripts/openroad/drt.tcl

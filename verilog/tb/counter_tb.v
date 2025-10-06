@@ -18,11 +18,11 @@ module counter_tb;
 	//DUT
 	counter 
 		#(BW)
-		counter_dut (
-			.clk_i(clk_i),
-			.rst_i(rst_i),
-			.counter_val_o(cnt_val)
-		);
+	counter_dut (
+		.clk_i(clk_i),
+		.rst_i(rst_i),
+		.counter_val_o(cnt_val)
+	);
 	
 	//Generate clock
 	/* verilator lint_off STMTDLY */
@@ -38,5 +38,4 @@ module counter_tb;
 		#200 $finish; // finish
 		/* verilator lint_on STMTDLY */
 	end
-	
 endmodule // counter_tb

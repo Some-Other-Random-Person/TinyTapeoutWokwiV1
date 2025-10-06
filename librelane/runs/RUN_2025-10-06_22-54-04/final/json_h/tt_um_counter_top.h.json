@@ -1,0 +1,217 @@
+{
+  "creator": "Yosys 0.57 (git sha1 3aca86049, g++ 13.3.0-6ubuntu2~24.04 -fPIC -O3)",
+  "modules": {
+    "tt_um_counter_top": {
+      "attributes": {
+        "hdlname": "tt_um_counter_top",
+        "dynports": "00000000000000000000000000000001",
+        "top": "00000000000000000000000000000001",
+        "src": "/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:10.1-43.10"
+      },
+      "ports": {
+        "ui_in": {
+          "direction": "input",
+          "bits": [ 2, 3, 4, 5, 6, 7, 8, 9 ]
+        },
+        "uo_out": {
+          "direction": "output",
+          "bits": [ 10, 11, 12, 13, 14, 15, 16, 17 ]
+        },
+        "uio_in": {
+          "direction": "input",
+          "bits": [ 18, 19, 20, 21, 22, 23, 24, 25 ]
+        },
+        "uio_out": {
+          "direction": "output",
+          "bits": [ "0", "0", "0", "0", "0", "0", "0", "0" ]
+        },
+        "uio_oe": {
+          "direction": "output",
+          "bits": [ "0", "0", "0", "0", "0", "0", "0", "0" ]
+        },
+        "ena": {
+          "direction": "input",
+          "bits": [ 26 ]
+        },
+        "clk": {
+          "direction": "input",
+          "bits": [ 27 ]
+        },
+        "rst_n": {
+          "direction": "input",
+          "bits": [ 28 ]
+        }
+      },
+      "cells": {
+        "$flatten\\counter_inst.$add$/foss/designs/kvic_336007_ws25/verilog/src/counter.v:31$5": {
+          "hide_name": 1,
+          "type": "$add",
+          "parameters": {
+            "A_SIGNED": "00000000000000000000000000000000",
+            "A_WIDTH": "00000000000000000000000000001000",
+            "B_SIGNED": "00000000000000000000000000000000",
+            "B_WIDTH": "00000000000000000000000000001000",
+            "Y_WIDTH": "00000000000000000000000000001000"
+          },
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/counter.v:31.19-31.55"
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "input",
+            "Y": "output"
+          },
+          "connections": {
+            "A": [ 10, 11, 12, 13, 14, 15, 16, 17 ],
+            "B": [ "1", "0", "0", "0", "0", "0", "0", "0" ],
+            "Y": [ 29, 30, 31, 32, 33, 34, 35, 36 ]
+          }
+        },
+        "$flatten\\counter_inst.$procdff$9": {
+          "hide_name": 1,
+          "type": "$dff",
+          "parameters": {
+            "CLK_POLARITY": "1",
+            "WIDTH": "00000000000000000000000000001000"
+          },
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/counter.v:24.2-33.5"
+          },
+          "port_directions": {
+            "CLK": "input",
+            "D": "input",
+            "Q": "output"
+          },
+          "connections": {
+            "CLK": [ 27 ],
+            "D": [ 37, 38, 39, 40, 41, 42, 43, 44 ],
+            "Q": [ 10, 11, 12, 13, 14, 15, 16, 17 ]
+          }
+        },
+        "$flatten\\counter_inst.$procmux$7": {
+          "hide_name": 1,
+          "type": "$mux",
+          "parameters": {
+            "WIDTH": "00000000000000000000000000001000"
+          },
+          "attributes": {
+            "full_case": "00000000000000000000000000000001",
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/counter.v:25.7-25.20|/foss/designs/kvic_336007_ws25/verilog/src/counter.v:25.3-32.6"
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "input",
+            "S": "input",
+            "Y": "output"
+          },
+          "connections": {
+            "A": [ 29, 30, 31, 32, 33, 34, 35, 36 ],
+            "B": [ "0", "0", "0", "0", "0", "0", "0", "0" ],
+            "S": [ 45 ],
+            "Y": [ 37, 38, 39, 40, 41, 42, 43, 44 ]
+          }
+        },
+        "$not$/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:31$1": {
+          "hide_name": 1,
+          "type": "$not",
+          "parameters": {
+            "A_SIGNED": "00000000000000000000000000000000",
+            "A_WIDTH": "00000000000000000000000000000001",
+            "Y_WIDTH": "00000000000000000000000000000001"
+          },
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:31.10-31.16"
+          },
+          "port_directions": {
+            "A": "input",
+            "Y": "output"
+          },
+          "connections": {
+            "A": [ 28 ],
+            "Y": [ 45 ]
+          }
+        }
+      },
+      "netnames": {
+        "$flatten\\counter_inst.$0\\counter_val[7:0]": {
+          "hide_name": 1,
+          "bits": [ 37, 38, 39, 40, 41, 42, 43, 44 ],
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/counter.v:24.2-33.5"
+          }
+        },
+        "$flatten\\counter_inst.$add$/foss/designs/kvic_336007_ws25/verilog/src/counter.v:31$5_Y": {
+          "hide_name": 1,
+          "bits": [ 29, 30, 31, 32, 33, 34, 35, 36 ],
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/counter.v:31.19-31.55"
+          }
+        },
+        "clk": {
+          "hide_name": 0,
+          "bits": [ 27 ],
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:17.23-17.26"
+          }
+        },
+        "counter_inst.rst_i": {
+          "hide_name": 0,
+          "bits": [ 45 ],
+          "attributes": {
+            "hdlname": "counter_inst rst_i",
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/counter.v:15.12-15.17"
+          }
+        },
+        "ena": {
+          "hide_name": 0,
+          "bits": [ 26 ],
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:16.23-16.26"
+          }
+        },
+        "rst_n": {
+          "hide_name": 0,
+          "bits": [ 28 ],
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:18.23-18.28"
+          }
+        },
+        "ui_in": {
+          "hide_name": 0,
+          "bits": [ 2, 3, 4, 5, 6, 7, 8, 9 ],
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:11.23-11.28"
+          }
+        },
+        "uio_in": {
+          "hide_name": 0,
+          "bits": [ 18, 19, 20, 21, 22, 23, 24, 25 ],
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:13.23-13.29"
+          }
+        },
+        "uio_oe": {
+          "hide_name": 0,
+          "bits": [ "0", "0", "0", "0", "0", "0", "0", "0" ],
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:15.23-15.29"
+          }
+        },
+        "uio_out": {
+          "hide_name": 0,
+          "bits": [ "0", "0", "0", "0", "0", "0", "0", "0" ],
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:14.23-14.30"
+          }
+        },
+        "uo_out": {
+          "hide_name": 0,
+          "bits": [ 10, 11, 12, 13, 14, 15, 16, 17 ],
+          "attributes": {
+            "src": "/foss/designs/kvic_336007_ws25/verilog/src/tt_um_counter_top.v:12.23-12.29"
+          }
+        }
+      }
+    }
+  }
+}
