@@ -30,15 +30,15 @@ module button_debounce (
     reg deb_sig;
     reg prevState;
 
-    always @(posedge reset) begin
-        stateMemory = 4'b0000;
-        prevState = 0;
-        deb_sig <= 0;
-    end
-
-    always @(posedge regular_clk) begin
-        if (slow_clk) begin
-            stateMemory = {stateMemory[2:0], button_signal};   //if stable over 5ms
+    always @(posedge regular_clk or posedge reset) begin
+        if (reset) begin
+            stateMemory = 4'b0000;
+            prevState = 0;
+            deb_sig <= 0;
+        end else begin
+            if (slow_clk) begin
+                stateMemory = {stateMemory[2:0], button_signal};   //if stable over 5ms
+            end
         end
     end
 	 

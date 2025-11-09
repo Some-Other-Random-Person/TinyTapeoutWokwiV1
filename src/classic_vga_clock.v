@@ -247,8 +247,8 @@ localparam [15:0] BELL_SYMB[0:15] = '{
     always @(posedge video_clk) begin
         
         if (in_display_area && al_on) begin
-            row_bell <= bell_symb[fb_bell_y];
-            bellsig <= row_bell[15-fb_bell_x];
+            row_bell = bell_symb[fb_bell_y];
+            bellsig = row_bell[15-fb_bell_x];
             //pixel_bw
         end else begin
             bellsig <= 1'b0; 

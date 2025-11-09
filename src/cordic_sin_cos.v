@@ -108,7 +108,7 @@ always @(posedge clk) begin
                 x_temp = x + (y >>> iterCount);
                 y_temp = y - (x >>> iterCount);
                 z_temp = z + angle_table[iterCount];
-                state <= DONE; 
+                state = DONE; 
             end else begin
                 x_temp = x - (y >>> iterCount);
                 y_temp = y + (x >>> iterCount);

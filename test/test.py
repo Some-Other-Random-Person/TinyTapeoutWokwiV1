@@ -30,8 +30,8 @@ async def test_project(dut):
     cycles_to_check = 50_000 
     for i in range(0, cycles_to_check, 20):
         await ClockCycles(dut.clk, 20)
-        val = int(dut.uo_out.value)
-        if ((val & 0b10000000) != 0):
+        val = dut.uo_out.value[7]
+        if ((val & 1) != 0):
             sync_pulse_observed = True
             dut._log.info(f"H-sync observed!")
 
