@@ -16,9 +16,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-`include "button_debounce.v"
-`include "clockRenderer.v"
-`include "display_vga.v"
+//`include "button_debounce.v"
+//`include "clockRenderer.v"
+//`include "display_vga.v"
 
 module classic_vga_clock (
     input wire video_clk,           //31.5 MHz
@@ -76,10 +76,10 @@ always @(posedge video_clk or posedge reset) begin
         sec_counter <= 0;
         slow_clk_counter <= 0;
         buzzer_clk_counter <= 0;
-        sec_clock <= 0;
-        buzzer_clk <= 0;
-        slow_clk <= 0;
-        bellsig <= 0;
+        sec_clock = 0;
+        buzzer_clk = 0;
+        slow_clk = 0;
+        bellsig = 0;
 
         //draw = 0;
         al_on <= 0;

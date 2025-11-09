@@ -116,13 +116,13 @@ always @(posedge clk) begin
             end
             /* verilator lint_on WIDTH */
             iterCount = iterCount + 1;
-            state <= DONE; 
+            state = DONE; 
         end
             
         DONE: begin
-            x <= x_temp;
-            y <= y_temp;
-            z <= z_temp;
+            x = x_temp;
+            y = y_temp;
+            z = z_temp;
             if (iterCount == I_MAX) begin
                 cosine = x_temp;
                 sine = y_temp;
@@ -148,11 +148,11 @@ always @(posedge clk) begin
                 done = 1;
                 state = START; 
             end else begin
-                state <= ITERATING; 
+                state = ITERATING; 
             end
         end     
         default: begin
-            state <= START; 
+            state = START; 
         end
     endcase 
 end

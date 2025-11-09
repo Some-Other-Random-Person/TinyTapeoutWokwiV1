@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-`include "cordic_sin_cos.v"
+//`include "cordic_sin_cos.v"
 
 module clockRenderer (
     input clk,
@@ -89,7 +89,7 @@ task map_clockhand;
     reg [13:0] shiftedSinTemp;
     
     begin 
-        $display("Map");
+        //$display("Map");
         /* verilator lint_off WIDTH */
         signS = sinT >>> 14;
         signC = cosT >>> 14;
@@ -134,13 +134,13 @@ always @(posedge clk or posedge reset) begin
             //$display("%b", framebuffer[i]);
             
         end
-        refreshCycleRunning <= 1'b0;
-        cordicRunning <= 1'b0;
+        refreshCycleRunning = 1'b0;
+        cordicRunning = 1'b0;
         //cordDone = 1'b0;
-        cordicStart <= 1'b0;
-        start <= 0;
-        done <= 1;
-        restartInhibit <= 0;
+        cordicStart = 1'b0;
+        start = 0;
+        done = 1;
+        restartInhibit = 0;
 
     end else begin
         if (!slow_clk) begin
@@ -150,7 +150,7 @@ always @(posedge clk or posedge reset) begin
         if (slow_clk && done && !restartInhibit) begin
             start = 1'b1;
             restartInhibit = 1'b1;
-            $display("start");
+            //$display("start");
         end
 
         if (start) begin
@@ -169,11 +169,11 @@ always @(posedge clk or posedge reset) begin
             end
         end
         if (refreshCycleRunning) begin
-            $display("test");
+            //$display("test");
             case(state) 
                 DRAW_HRS: begin
                     if (!cordicRunning) begin
-                        $display("entered");
+                        //$display("entered");
                         /* verilator lint_off WIDTH */
                         currAngle = hour_angle;
                         /* verilator lint_on WIDTH */
@@ -239,7 +239,7 @@ always @(posedge clk or posedge reset) begin
                             refreshCycleRunning = 1'b0;
                             done = 1;
                             state = DRAW_HRS;
-                            $display("Done!");
+                            //$display("Done!");
                             
                         end
                     end
@@ -270,7 +270,7 @@ wire in_display_area = (h_adj < DISP_WIDTH) && (v_adj < DISP_HEIGHT);
 always @(posedge clk) begin
     
     if (in_display_area && done) begin
-        row <= framebuffer[fb_y];
+        row = framebuffer[fb_y];
         pixel_bw <= row[63-fb_x];
         //$display("drawing");
     end

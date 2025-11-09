@@ -33,12 +33,12 @@ module button_debounce (
     always @(posedge reset) begin
         stateMemory = 4'b0000;
         prevState = 0;
-        deb_sig = 0;
+        deb_sig <= 0;
     end
 
     always @(posedge regular_clk) begin
         if (slow_clk) begin
-            stateMemory <= {stateMemory[2:0], button_signal};   //if stable over 5ms
+            stateMemory = {stateMemory[2:0], button_signal};   //if stable over 5ms
         end
     end
 	 
@@ -49,7 +49,7 @@ module button_debounce (
         end else if (stateMemory == 4'b0000) begin
             deb_sig <= 0; 
         end
-        prevState <= deb_sig;   
+        prevState = deb_sig;   
 	end
 	  
     always @(*) begin //both edges

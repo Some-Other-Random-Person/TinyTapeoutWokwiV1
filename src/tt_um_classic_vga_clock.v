@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-`include "classic_vga_clock.v"
+//`include "classic_vga_clock.v"
 
 module tt_um_classic_vga_clock (
     input  wire [7:0] ui_in,    // Dedicated inputs
