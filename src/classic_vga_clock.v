@@ -251,7 +251,7 @@ localparam [15:0] BELL_SYMB[0:15] = '{
             bellsig = row_bell[15-fb_bell_x];
             //pixel_bw
         end else begin
-            bellsig <= 1'b0; 
+            bellsig = 1'b0; 
         end
     end
 /* verilator lint_on BLKSEQ */
