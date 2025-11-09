@@ -52,7 +52,7 @@ module tt_um_classic_vga_clock (
 
     classic_vga_clock uut (
         .video_clk(clk),
-        .reset_n(reset_n),
+        .reset_n(rst_n),
         .hour_in(hour_in),
         .min_in(min_in),
         .sec_in(sec_in),
