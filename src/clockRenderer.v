@@ -29,7 +29,7 @@ module clockRenderer (
     input  wire [9:0]  vertCounter,     
     input  wire [9:0]  x_offset,     
     input  wire [9:0]  y_offset,    
-    output reg         pixel_bw     
+    output wire         pixel_bw     
 );
 /* verilator lint_off BLKSEQ */
 
@@ -49,6 +49,9 @@ reg restartInhibit;
 reg [15:0] currAngle;
 wire [15:0] sinW;
 wire [15:0] cosW;
+
+reg pixel_bw_reg;
+assign pixel_bw = pixel_bw_reg ? 1'b1 : 1'b0;
 
 cordic_sin_cos cordicModule (.clk(clk), .reset(reset), .start(cordicStart), .i_angle(currAngle), .sine_out(sinW), .cosine_out(cosW), .done(cordDone));
 
@@ -122,6 +125,7 @@ always @(posedge clk or posedge reset) begin
         done = 1;
         restartInhibit = 0;
         state = DRAW_HRS;
+        pixel_bw_reg = 0;
 
     end else begin
         if (!slow_clk) begin
@@ -347,11 +351,11 @@ always @(posedge clk or posedge reset) begin
         end
         if (in_display_area && done) begin
             dispRow = framebuffer[fb_y];
-            pixel_bw <= dispRow[63-fb_x];
+            pixel_bw_reg <= dispRow[63-fb_x];
             //$display("drawing");
         end
         else begin
-            pixel_bw <= 1'b0; 
+            pixel_bw_reg <= 1'b0; 
         end
     end
 end

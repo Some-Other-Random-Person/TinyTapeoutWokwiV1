@@ -61,7 +61,7 @@ assign buzzer_out = (alarm && sec_clock) ? buzzer_clk : 1'b0;
 
 wire video_visible_range;  //within drawing range
 reg bellsig;
-reg drawClockhandPx;
+wire drawClockhandPx;
 wire draw = drawClockhandPx | bellsig;
 
 assign black_white = video_visible_range && draw ? 1'b1 : 1'b0;
