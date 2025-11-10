@@ -471,11 +471,13 @@ always @(posedge clk or posedge reset) begin
             //$display("%b", framebuffer[i]);
             
         end
-        restartInhibit = 0;
+        //restartInhibit = 0;
         done = 1;
-        run = 0;
+        //run = 0;
+        state = DRAW_HRS;
 
     end else begin
+        
         // if (slow_clk && done && !restartInhibit) begin
         //     done = 0;
         //     restartInhibit = 1;
@@ -486,6 +488,15 @@ always @(posedge clk or posedge reset) begin
         // if (run) begin
             case(state) 
                 DRAW_HRS: begin
+                    for (i = 0; i < 64; i = i + 1) begin
+                        /* verilator lint_off WIDTH */
+                        row = framebuffer[i];
+                        row = 0;
+                        framebuffer[i] = row;
+                        /* verilator lint_on WIDTH */
+                        //$display("%b", framebuffer[i]);
+                        
+                    end
                     done = 0;
                     currAngle = hour_angle;
 

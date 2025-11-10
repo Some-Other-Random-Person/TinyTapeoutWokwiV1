@@ -66,7 +66,7 @@ wire draw = drawClockhandPx | bellsig;
 
 assign black_white = video_visible_range && draw ? 1'b1 : 1'b0;
 
-always @(posedge video_clk or posedge reset) begin
+always @(posedge video_clk) begin
     if(reset) begin
         seconds <= 0;
         minutes <= 0;
