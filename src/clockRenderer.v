@@ -117,30 +117,30 @@ always @(posedge clk or posedge reset) begin
             //$display("%b", framebuffer[i]);
             
         end
-        refreshCycleRunning = 1'b0;
-        cordicRunning = 1'b0;
+        refreshCycleRunning <= 1'b0;
+        cordicRunning <= 1'b0;
         //cordDone = 1'b0;
-        cordicStart = 1'b0;
-        start = 0;
-        done = 1;
-        restartInhibit = 0;
+        cordicStart <= 1'b0;
+        start <= 0;
+        done <= 1;
+        restartInhibit <= 0;
         state = DRAW_HRS;
         pixel_bw_reg <= 0;
 
     end else begin
         if (!slow_clk) begin
-            restartInhibit = 1'b0;
+            restartInhibit <= 1'b0;
             //$display("inhibit deactivated");
         end
         if (slow_clk && done && !restartInhibit) begin
-            start = 1'b1;
-            restartInhibit = 1'b1;
+            start <= 1'b1;
+            restartInhibit <= 1'b1;
             //$display("start");
         end
 
         if (start) begin
-            start = 0;
-            done = 0;
+            start <= 0;
+            done <= 0;
             if (!refreshCycleRunning) begin
                 for (i = 0; i < 64; i = i + 1) begin
                     /* verilator lint_off WIDTH */
@@ -150,7 +150,7 @@ always @(posedge clk or posedge reset) begin
                     /* verilator lint_on WIDTH */
                     //$display("%b", framebuffer[i]);
                 end
-                refreshCycleRunning = 1'b1;
+                refreshCycleRunning <= 1'b1;
             end
         end
         
@@ -164,10 +164,10 @@ always @(posedge clk or posedge reset) begin
                         currAngle = hour_angle;
                         /* verilator lint_on WIDTH */
                         //$display("hrsAng = %f", currAngle);
-                        cordicStart = 1'b1;
-                        cordicRunning = 1'b1;
+                        cordicStart <= 1'b1;
+                        cordicRunning <= 1'b1;
                     end else if (cordicRunning) begin
-                        cordicStart = 1'b0;
+                        cordicStart <= 1'b0;
                         if (cordDone) begin
                             //map_clockhand(sinW, cosW, HOUR_LEN);
                             /* verilator lint_off WIDTH */
@@ -198,7 +198,7 @@ always @(posedge clk or posedge reset) begin
                             end
                             /* verilator lint_on WIDTH */
                             if (j == 23) begin
-                                cordicRunning = 1'b0;
+                                cordicRunning <= 1'b0;
                                 state = DRAW_MINS;
                             end
                         end
@@ -210,10 +210,10 @@ always @(posedge clk or posedge reset) begin
                         currAngle = minute_angle;
                         /* verilator lint_on WIDTH */
                         //$display("minAng = %f", currAngle);
-                        cordicStart = 1'b1;
-                        cordicRunning = 1'b1;
+                        cordicStart <= 1'b1;
+                        cordicRunning <= 1'b1;
                     end else if (cordicRunning) begin
-                        cordicStart = 1'b0;
+                        cordicStart <= 1'b0;
                         if (cordDone) begin
                             //map_clockhand(sinW, cosW, MINUTE_LEN);
                             /* verilator lint_off WIDTH */
@@ -244,7 +244,7 @@ always @(posedge clk or posedge reset) begin
                             end
                             /* verilator lint_on WIDTH */
                             if (k == 31) begin
-                                cordicRunning = 1'b0;
+                                cordicRunning <= 1'b0;
                                 state = DRAW_SECS;
                             end
                         end
@@ -256,10 +256,10 @@ always @(posedge clk or posedge reset) begin
                         currAngle = second_angle;
                         /* verilator lint_on WIDTH */
                         //$display("secAng = %f", currAngle);
-                        cordicStart = 1'b1;
-                        cordicRunning = 1'b1;
+                        cordicStart <= 1'b1;
+                        cordicRunning <= 1'b1;
                     end else if (cordicRunning) begin
-                        cordicStart = 1'b0;
+                        cordicStart <= 1'b0;
                         if (cordDone) begin
                             //map_clockhand(sinW, cosW, SEC_LEN);
                             /* verilator lint_off WIDTH */
@@ -289,7 +289,7 @@ always @(posedge clk or posedge reset) begin
                             end
                             /* verilator lint_on WIDTH */
                             if (l == 27) begin
-                                cordicRunning = 1'b0;
+                                cordicRunning <= 1'b0;
                                 state = DRAW_ALARM;
                             end
                         end
@@ -301,10 +301,10 @@ always @(posedge clk or posedge reset) begin
                         currAngle = alarm_angle;
                         /* verilator lint_on WIDTH */
                         //$display("alAng = %f", currAngle);
-                        cordicStart = 1'b1;
-                        cordicRunning = 1'b1;
+                        cordicStart <= 1'b1;
+                        cordicRunning <= 1'b1;
                     end else if (cordicRunning) begin
-                        cordicStart = 1'b0;
+                        cordicStart <= 1'b0;
                         if (cordDone) begin
                             //map_clockhand(sinW, cosW, ALARM_LEN);
                             /* verilator lint_off WIDTH */
@@ -334,9 +334,9 @@ always @(posedge clk or posedge reset) begin
                             end
                             /* verilator lint_on WIDTH */
                             if (m == 17) begin
-                                cordicRunning = 1'b0;
-                                refreshCycleRunning = 1'b0;
-                                done = 1;
+                                cordicRunning <= 1'b0;
+                                refreshCycleRunning <= 1'b0;
+                                done <= 1;
                                 state = DRAW_HRS;
                                 //$display("Done!");
                             end

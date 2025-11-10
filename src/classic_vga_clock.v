@@ -191,11 +191,11 @@ end
 
     
 
-    // button_debounce hrsAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(hour_in), .output_pulse(hrs_adj_input), .reset(reset));
-    // button_debounce minAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(min_in), .output_pulse(min_adj_input), .reset(reset));
-    // button_debounce secAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(sec_in), .output_pulse(sec_adj_input), .reset(reset));
-    // button_debounce alAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(al_in), .output_pulse(al_adj_input), .reset(reset));
-    // button_debounce alOnOff (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(al_on_off_toggle_in), .output_pulse(al_on_off_toggle_line), .reset(reset));
+    button_debounce hrsAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(hour_in), .output_pulse(hrs_adj_input), .reset(reset));
+    button_debounce minAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(min_in), .output_pulse(min_adj_input), .reset(reset));
+    button_debounce secAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(sec_in), .output_pulse(sec_adj_input), .reset(reset));
+    button_debounce alAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(al_in), .output_pulse(al_adj_input), .reset(reset));
+    button_debounce alOnOff (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(al_on_off_toggle_in), .output_pulse(al_on_off_toggle_line), .reset(reset));
 
     wire [9:0] x_pix;          // X position for actual pixel.
     wire [9:0] y_pix;          // Y position for actual pixel.
