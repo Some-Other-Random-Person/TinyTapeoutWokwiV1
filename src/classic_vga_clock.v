@@ -119,7 +119,7 @@ clock_div #(31500000, 1)   slowClock1Hz (.clk(clk), .reset(reset), .slower_clk_o
 clock_div #(31500000, 31500000)   mainClk (.clk(clk), .reset(reset), .slower_clk_out_pulse(main_clk_trigg));
 */
 
-always @(posedge clk) begin
+always @(posedge clk or posedge reset) begin
     if(reset) begin
         // bell_symb[0] <= 16'b0000001111000000;
         // bell_symb[1] <= 16'b0000011111100000;
