@@ -42,6 +42,7 @@ wire reset = !reset_n;
 wire sec_clock;
 wire slow_clk;
 wire buzzer_clk;
+wire main_clk_trigg;
 
 //wire slow_clk;
 
@@ -101,6 +102,8 @@ display_vga vga_0 (.clk(clk), .sys_rst(reset), .hsync(vga_horizSync), .vsync(vga
 clock_div #(31500000, 100)   slowClock100Hz (.clk(clk), .reset(reset), .slower_clk_out_pulse(slow_clk));
 clock_div #(31500000, 3150)   slowClockBuzzer (.clk(clk), .reset(reset), .slower_clk_out_pulse(buzzer_clk));
 clock_div #(31500000, 1)   slowClock1Hz (.clk(clk), .reset(reset), .slower_clk_out_pulse(sec_clock));
+clock_div #(31500000, 31500000)   mainClk (.clk(clk), .reset(reset), .slower_clk_out_pulse(main_clk_trigg));
+
 
 always @(posedge clk) begin
     if(reset) begin
@@ -134,7 +137,7 @@ always @(posedge clk) begin
         //init Bell
         
 
-    end else begin
+    end else if (main_clk_trigg) begin
 
         if(seconds >= 60) begin
             seconds <= 0;
