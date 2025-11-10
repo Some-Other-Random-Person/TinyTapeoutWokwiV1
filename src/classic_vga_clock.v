@@ -96,8 +96,8 @@ wire in_display_area = (h_adj < DISP_WIDTH) && (v_adj < DISP_HEIGHT);
 // button_debounce alOnOff (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al_on_off_toggle_in), .output_pulse(al_on_off_toggle_line), .reset(reset));
          
 
-// reg [9:0] x_offs;
-// reg [9:0] y_offs;
+ reg [9:0] x_offs;
+ reg [9:0] y_offs;
 //parameter SCALE = 7;
 
 
