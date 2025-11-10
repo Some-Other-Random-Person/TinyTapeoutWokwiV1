@@ -121,7 +121,7 @@ always @(posedge clk or posedge reset) begin
         cordicRunning <= 1'b0;
         //cordDone = 1'b0;
         cordicStart <= 1'b0;
-        start <= 0;
+        start = 0;
         done <= 1;
         restartInhibit <= 0;
         state = DRAW_HRS;
@@ -133,13 +133,13 @@ always @(posedge clk or posedge reset) begin
             //$display("inhibit deactivated");
         end
         if (slow_clk && done && !restartInhibit) begin
-            start <= 1'b1;
+            start = 1'b1;
             restartInhibit <= 1'b1;
             //$display("start");
         end
 
         if (start) begin
-            start <= 0;
+            start = 0;
             done <= 0;
             if (!refreshCycleRunning) begin
                 for (i = 0; i < 64; i = i + 1) begin
