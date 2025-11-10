@@ -118,6 +118,9 @@ always @(posedge video_clk) begin
         alarm <= 0;
 
         //init Bell
+        
+
+    end else begin
         bell_symb[0] <= 16'b0000001111000000;
         bell_symb[1] <= 16'b0000011111100000;
         bell_symb[2] <= 16'b0000110000110000;
@@ -134,8 +137,6 @@ always @(posedge video_clk) begin
         bell_symb[13] <= 16'b1100000000000011;
         bell_symb[14] <= 16'b1111111111111111;
         bell_symb[15] <= 16'b0000001111000000;
-
-    end else begin
         if(seconds >= 60) begin
             seconds <= 0;
             minutes <= minutes + 1;
