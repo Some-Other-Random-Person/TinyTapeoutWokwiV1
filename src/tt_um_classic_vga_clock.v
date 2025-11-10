@@ -51,7 +51,7 @@ module tt_um_classic_vga_clock (
     assign uio_out[0] = buzzer_out;
 
     classic_vga_clock uut (
-        .video_clk(clk),
+        .clk(clk),
         .reset_n(rst_n),
         .hour_in(hour_in),
         .min_in(min_in),
