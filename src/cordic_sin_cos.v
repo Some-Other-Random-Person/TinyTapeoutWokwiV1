@@ -22,8 +22,8 @@ module cordic_sin_cos (
         input wire start,    
         input wire reset,
         input [15:0] i_angle, 
-        output reg signed [15:0] sine_output, 
-        output reg signed [15:0] cosine_output,  
+        output wire signed [15:0] sine_output, 
+        output wire signed [15:0] cosine_output,  
         output reg done 
 );
 /* verilator lint_off BLKSEQ */
@@ -42,6 +42,8 @@ reg signed [15:0] cosine;
 reg signed [15:0] sine_out;
 reg signed [15:0] cosine_out;
 
+assign sine_output = sine_out;
+assign cosine_output = cosine_out;
 //cordic
 parameter I_MAX = 16; //iterations
 reg [15:0] angle_table [0:15];  //init on reset
@@ -63,17 +65,15 @@ reg [1:0] quadrant;
 reg [1:0] state;
 reg on;
 
-always @(posedge clk or posedge reset) begin
+always @(posedge clk or posedge reset or posedge start) begin
+    if (start) begin
+        on <= 1;
+    end
     if (reset) begin      
         on <= 0;
     end else begin
-        if (done) begin
-            cosine_output = cosine_out;
-            sine_output = sine_out;
-        end
-        if (start) begin
-            on <= 1;
-        end
+        
+        
         case(state)
             START: begin
                 if (on) begin
