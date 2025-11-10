@@ -105,7 +105,7 @@ reg [13:0] shiftedSinTemp;
 
 always @(posedge clk or posedge reset) begin
     if (start) begin
-        start <= 0;
+        start = 0;
     end
     if (reset) begin
         
