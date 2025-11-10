@@ -192,8 +192,10 @@ always @(posedge clk) begin
     end else if (al_on && hours == al_hours && minutes == al_minutes) begin
             alarm <= 1'b1;
     end else begin
-        row_bell = bell_symb[fb_bell_y];
-        bellsig = row_bell[15-fb_bell_x];
+        // pos_x = fb_bell_x;
+        // pos_y = fb_bell_x;
+        // row_bell <= bell_symb[fb_bell_y];
+        bellsig <= 1;
             //pixel_bw
     end
 
