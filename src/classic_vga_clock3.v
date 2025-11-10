@@ -40,7 +40,7 @@ module classic_vga_clock (
 wire reset = !reset_n;
 
 wire sec_clock;
-reg slow_clk;
+wire slow_clk;
 wire buzzer_clk;
 wire main_clk_trigg;
 
@@ -54,7 +54,7 @@ reg [3:0] al_hours;
 // reg [25:0] sec_counter;
 // reg [19:0] slow_clk_counter;
 // reg [13:0] buzzer_clk_counter;
-// reg [15:0] bell_symb [0:15];
+//reg [15:0] bell_symb [0:15];
 
 wire sec_adj_input, min_adj_input, hrs_adj_input, al_adj_input, al_on_off_toggle_line;
 reg al_on, alarm;
@@ -89,48 +89,51 @@ wire [3:0] fb_bell_y = v_adj / SCALE;
 /* verilator lint_on WIDTH */
 wire in_display_area = (h_adj < DISP_WIDTH) && (v_adj < DISP_HEIGHT);
 
-// button_debounce hrsAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(hour_in), .output_pulse(hrs_adj_input), .reset(reset));
-// button_debounce minAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(min_in), .output_pulse(min_adj_input), .reset(reset));
-// button_debounce secAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(sec_in), .output_pulse(sec_adj_input), .reset(reset));
-// button_debounce alAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al_in), .output_pulse(al_adj_input), .reset(reset));
-// button_debounce alOnOff (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al_on_off_toggle_in), .output_pulse(al_on_off_toggle_line), .reset(reset));
-         
+button_debounce hrsAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(hour_in), .output_pulse(hrs_adj_input), .reset(reset));
+button_debounce minAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(min_in), .output_pulse(min_adj_input), .reset(reset));
+button_debounce secAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(sec_in), .output_pulse(sec_adj_input), .reset(reset));
+button_debounce alAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al_in), .output_pulse(al_adj_input), .reset(reset));
+button_debounce alOnOff (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al_on_off_toggle_in), .output_pulse(al_on_off_toggle_line), .reset(reset));
+         // Y position for actual pixel.
 
-// reg [9:0] x_offs;
-// reg [9:0] y_offs;
+reg [9:0] x_offs;
+reg [9:0] y_offs;
 //parameter SCALE = 7;
 
 
 
-//clockRenderer clockfaceRendering (.clk(clk), .slow_clk(slow_clk), .reset(reset), .hour(hours), .minute(minutes), .second(seconds), .al_hour(al_hours), .al_minute(al_minutes), .horizCounter(x_pix), .vertCounter(y_pix), .x_offset(x_offs), .y_offset(y_offs), .pixel_bw(drawClockhandPx));
+clockRenderer clockfaceRendering (.clk(clk), .slow_clk(slow_clk), .reset(reset), .hour(hours), .minute(minutes), .second(seconds), .al_hour(al_hours), .al_minute(al_minutes), .horizCounter(x_pix), .vertCounter(y_pix), .x_offset(x_offs), .y_offset(y_offs), .pixel_bw(drawClockhandPx));
 
 display_vga vga_0 (.clk(clk), .sys_rst(reset), .hsync(vga_horizSync), .vsync(vga_vertSync), .horizPos(x_pix), .vertPos(y_pix), .active(video_visible_range));
-/*
+
 clock_div #(31500000, 100)   slowClock100Hz (.clk(clk), .reset(reset), .slower_clk_out_pulse(slow_clk));
 clock_div #(31500000, 3150)   slowClockBuzzer (.clk(clk), .reset(reset), .slower_clk_out_pulse(buzzer_clk));
 clock_div #(31500000, 1)   slowClock1Hz (.clk(clk), .reset(reset), .slower_clk_out_pulse(sec_clock));
 clock_div #(31500000, 31500000)   mainClk (.clk(clk), .reset(reset), .slower_clk_out_pulse(main_clk_trigg));
-*/
+
 
 always @(posedge clk) begin
     if(reset) begin
-        // bell_symb[0] <= 16'b0000001111000000;
-        // bell_symb[1] <= 16'b0000011111100000;
-        // bell_symb[2] <= 16'b0000110000110000;
-        // bell_symb[3] <= 16'b0001100000011000;
-        // bell_symb[4] <= 16'b0001100000011000;
-        // bell_symb[5] <= 16'b0001100000011000;
-        // bell_symb[6] <= 16'b0001100000011000;
-        // bell_symb[7] <= 16'b0001000000001000;
-        // bell_symb[8] <= 16'b0001000000001000;
-        // bell_symb[9] <= 16'b0011000000001100;
-        // bell_symb[10] <= 16'b0011000000001100;
-        // bell_symb[11] <= 16'b0110000000000110;
-        // bell_symb[12] <= 16'b1100000000000111;
-        // bell_symb[13] <= 16'b1100000000000011;
-        // bell_symb[14] <= 16'b1111111111111111;
-        // bell_symb[15] <= 16'b0000001111000000;
-        slow_clk = 0;
+        /*
+        bell_symb[0] <= 16'b0000001111000000;
+        bell_symb[1] <= 16'b0000011111100000;
+        bell_symb[2] <= 16'b0000110000110000;
+        bell_symb[3] <= 16'b0001100000011000;
+        bell_symb[4] <= 16'b0001100000011000;
+        bell_symb[5] <= 16'b0001100000011000;
+        bell_symb[6] <= 16'b0001100000011000;
+        bell_symb[7] <= 16'b0001000000001000;
+        bell_symb[8] <= 16'b0001000000001000;
+        bell_symb[9] <= 16'b0011000000001100;
+        bell_symb[10] <= 16'b0011000000001100;
+        bell_symb[11] <= 16'b0110000000000110;
+        bell_symb[12] <= 16'b1100000000000111;
+        bell_symb[13] <= 16'b1100000000000011;
+        bell_symb[14] <= 16'b1111111111111111;
+        bell_symb[15] <= 16'b0000001111000000;
+        */
+        x_offs  = 25;
+        y_offs = 15;
         seconds <= 0;
         minutes <= 0;
         hours <= 0;
@@ -141,68 +144,77 @@ always @(posedge clk) begin
         //draw = 0;
         al_on <= 0;
         alarm <= 0;
-        x_offs  = 25;
-        y_offs = 15;
+
         //init Bell
         
 
     end 
 
-    //      else if(seconds >= 60) begin
-    //         seconds <= 0;
-    //         minutes <= minutes + 1;
-    //     end
-    //      else if(minutes >= 60) begin
-    //         minutes <= 0;
-    //         hours <= hours + 1;
-    //     end
-    //     else if(hours >= 12) begin
-    //         hours <= 0;
-    //     end
+         else if(seconds >= 60) begin
+            seconds <= 0;
+            minutes <= minutes + 1;
+        end
+         else if(minutes >= 60) begin
+            minutes <= 0;
+            hours <= hours + 1;
+        end
+        else if(hours >= 12) begin
+            hours <= 0;
+        end
 
-    //     else if(al_minutes >= 60) begin
-    //         al_minutes <= 0;
-    //         al_hours <= al_hours + 1;
-    //     end
-    //     else if(al_hours >= 12) begin
-    //         al_hours <= 0;
-    //     end
-    //     else if (sec_clock) begin
-    //         seconds <= seconds + 1;
-    //     end
-    //     // adjustment buttons
-    //     else if (sec_adj_input) begin
-    //         seconds <= seconds + 1;
-    //     end
-    //     else if (min_adj_input) begin
-    //         minutes <= minutes + 1;
-    //     end
-    //     else if (hrs_adj_input) begin
-    //         hours <= hours + 1;
-    //     end
-    //     else if (al_adj_input) begin
-    //         al_minutes <= al_minutes + 10;
-    //     end
-    //  else if (al_on_off_toggle_line && al_on) begin
-    //     al_on <= 1'b0;
-    //     alarm <= 1'b0;
+        else if(al_minutes >= 60) begin
+            al_minutes <= 0;
+            al_hours <= al_hours + 1;
+        end
+        else if(al_hours >= 12) begin
+            al_hours <= 0;
+        end
+        else if (sec_clock) begin
+            seconds <= seconds + 1;
+        end
+        // adjustment buttons
+        else if (sec_adj_input) begin
+            seconds <= seconds + 1;
+        end
+        else if (min_adj_input) begin
+            minutes <= minutes + 1;
+        end
+        else if (hrs_adj_input) begin
+            hours <= hours + 1;
+        end
+        else if (al_adj_input) begin
+            al_minutes <= al_minutes + 10;
+        end
+     else if (al_on_off_toggle_line && al_on) begin
+        al_on <= 1'b0;
+        alarm <= 1'b0;
 
-    //  end else if (al_on_off_toggle_line && !al_on) begin
+     end else if (al_on_off_toggle_line && !al_on) begin
 
-    //             al_on <= 1'b1;
+                al_on <= 1'b1;
             
-    // end else if (al_on && hours == al_hours && minutes == al_minutes) begin
-    //         alarm <= 1'b1;
-    // end else begin
-    //     // pos_x = fb_bell_x;
-    //     // pos_y = fb_bell_x;
-    //     // row_bell <= bell_symb[fb_bell_y];
-    //     bellsig <= 1;
-    //         //pixel_bw
-    // end
+    end else if (al_on && hours == al_hours && minutes == al_minutes) begin
+            alarm <= 1'b1;
+    end else begin
+        // pos_x = fb_bell_x;
+        // pos_y = fb_bell_x;
+        // row_bell <= bell_symb[fb_bell_y];
+        bellsig = 1;
+            //pixel_bw
+    end
 
 
 end
 
+    
+
+   
+
+    //wire pixel_on;
+
+
+
+
+/* verilator lint_on BLKSEQ */
 endmodule
 `default_nettype wire
