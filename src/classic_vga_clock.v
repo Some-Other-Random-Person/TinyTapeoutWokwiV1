@@ -98,6 +98,26 @@ clockRenderer clockfaceRendering (.clk(video_clk), .slow_clk(slow_clk), .reset(r
 
 display_vga vga_0 (.clk(video_clk), .sys_rst(reset), .hsync(vga_horizSync), .vsync(vga_vertSync), .horizPos(x_pix), .vertPos(y_pix), .active(video_visible_range));
 
+
+initial begin
+            bell_symb[0] <= 16'b0000001111000000;
+        bell_symb[1] <= 16'b0000011111100000;
+        bell_symb[2] <= 16'b0000110000110000;
+        bell_symb[3] <= 16'b0001100000011000;
+        bell_symb[4] <= 16'b0001100000011000;
+        bell_symb[5] <= 16'b0001100000011000;
+        bell_symb[6] <= 16'b0001100000011000;
+        bell_symb[7] <= 16'b0001000000001000;
+        bell_symb[8] <= 16'b0001000000001000;
+        bell_symb[9] <= 16'b0011000000001100;
+        bell_symb[10] <= 16'b0011000000001100;
+        bell_symb[11] <= 16'b0110000000000110;
+        bell_symb[12] <= 16'b1100000000000111;
+        bell_symb[13] <= 16'b1100000000000011;
+        bell_symb[14] <= 16'b1111111111111111;
+        bell_symb[15] <= 16'b0000001111000000;
+end
+
 always @(posedge video_clk) begin
     if(reset) begin
         seconds <= 0;
@@ -121,22 +141,7 @@ always @(posedge video_clk) begin
         
 
     end else begin
-        bell_symb[0] <= 16'b0000001111000000;
-        bell_symb[1] <= 16'b0000011111100000;
-        bell_symb[2] <= 16'b0000110000110000;
-        bell_symb[3] <= 16'b0001100000011000;
-        bell_symb[4] <= 16'b0001100000011000;
-        bell_symb[5] <= 16'b0001100000011000;
-        bell_symb[6] <= 16'b0001100000011000;
-        bell_symb[7] <= 16'b0001000000001000;
-        bell_symb[8] <= 16'b0001000000001000;
-        bell_symb[9] <= 16'b0011000000001100;
-        bell_symb[10] <= 16'b0011000000001100;
-        bell_symb[11] <= 16'b0110000000000110;
-        bell_symb[12] <= 16'b1100000000000111;
-        bell_symb[13] <= 16'b1100000000000011;
-        bell_symb[14] <= 16'b1111111111111111;
-        bell_symb[15] <= 16'b0000001111000000;
+
         if(seconds >= 60) begin
             seconds <= 0;
             minutes <= minutes + 1;
