@@ -23,6 +23,7 @@ project:
     - "cordic_sin_cos.v"
     - "button_debounce.v"
     - "clockRenderer.v"
+    - "clock_div.v"
     
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.

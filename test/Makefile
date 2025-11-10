@@ -6,7 +6,7 @@ SIM ?= icarus
 WAVES ?= 1
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = tt_um_classic_vga_clock.v classic_vga_clock.v display_vga.v cordic_sin_cos.v clockRenderer.v button_debounce.v
+PROJECT_SOURCES = tt_um_classic_vga_clock.v classic_vga_clock.v display_vga.v cordic_sin_cos.v clockRenderer.v button_debounce.v clock_div.v
 
 ifneq ($(GATES),yes)
 

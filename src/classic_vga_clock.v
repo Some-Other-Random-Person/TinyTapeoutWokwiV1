@@ -39,9 +39,9 @@ module classic_vga_clock (
 
 wire reset = !reset_n;
 
-reg sec_clock;
-reg slow_clk;
-reg buzzer_clk;
+wire sec_clock;
+wire slow_clk;
+wire buzzer_clk;
 
 //wire slow_clk;
 
@@ -50,9 +50,9 @@ reg [5:0] minutes;
 reg [3:0] hours;
 reg [5:0] al_minutes;
 reg [3:0] al_hours;
-reg [25:0] sec_counter;
-reg [19:0] slow_clk_counter;
-reg [13:0] buzzer_clk_counter;
+// reg [25:0] sec_counter;
+// reg [19:0] slow_clk_counter;
+// reg [13:0] buzzer_clk_counter;
 reg [15:0] bell_symb [0:15];
 
 wire sec_adj_input, min_adj_input, hrs_adj_input, al_adj_input, al_on_off_toggle_line;
@@ -66,6 +66,8 @@ wire draw = drawClockhandPx | bellsig;
 
 assign black_white = video_visible_range && draw ? 1'b1 : 1'b0;
 
+wire [9:0] x_pix;          // X position for actual pixel.
+wire [9:0] y_pix; 
 reg [15:0] row_bell;
 wire [9:0] x_offset_bell = 510;
 wire [9:0] y_offset_bell = 200;
@@ -86,9 +88,7 @@ button_debounce minAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(m
 button_debounce secAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(sec_in), .output_pulse(sec_adj_input), .reset(reset));
 button_debounce alAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al_in), .output_pulse(al_adj_input), .reset(reset));
 button_debounce alOnOff (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al_on_off_toggle_in), .output_pulse(al_on_off_toggle_line), .reset(reset));
-
-wire [9:0] x_pix;          // X position for actual pixel.
-wire [9:0] y_pix;          // Y position for actual pixel.
+         // Y position for actual pixel.
 
 reg [9:0] x_offs = 25;
 reg [9:0] y_offs = 15;
@@ -98,9 +98,13 @@ clockRenderer clockfaceRendering (.clk(clk), .slow_clk(slow_clk), .reset(reset),
 
 display_vga vga_0 (.clk(clk), .sys_rst(reset), .hsync(vga_horizSync), .vsync(vga_vertSync), .horizPos(x_pix), .vertPos(y_pix), .active(video_visible_range));
 
+clock_div #(31500000, 100)   slowClock100Hz (.clk(clk), .reset(reset), .slower_clk_out_pulse(slow_clk));
+clock_div #(31500000, 3150)   slowClockBuzzer (.clk(clk), .reset(reset), .slower_clk_out_pulse(buzzer_clk));
+clock_div #(31500000, 1)   slowClock1Hz (.clk(clk), .reset(reset), .slower_clk_out_pulse(sec_clock));
 
-initial begin
-            bell_symb[0] <= 16'b0000001111000000;
+always @(posedge clk) begin
+    if(reset) begin
+        bell_symb[0] <= 16'b0000001111000000;
         bell_symb[1] <= 16'b0000011111100000;
         bell_symb[2] <= 16'b0000110000110000;
         bell_symb[3] <= 16'b0001100000011000;
@@ -121,22 +125,11 @@ initial begin
         hours <= 0;
         al_minutes <= 0;
         al_hours <= 0;
-        sec_counter <= 0;
-        slow_clk_counter <= 0;
-        buzzer_clk_counter <= 0;
-        sec_clock = 0;
-        buzzer_clk = 0;
-        slow_clk = 0;
         bellsig = 0;
 
         //draw = 0;
         al_on <= 0;
         alarm <= 0;
-end
-
-always @(posedge clk) begin
-    if(reset) begin
-        
 
         //init Bell
         
@@ -162,34 +155,9 @@ always @(posedge clk) begin
         if(al_hours >= 12) begin
             al_hours <= 0;
         end
-
-        // second counter
-        sec_counter <= sec_counter + 1;
-        if(sec_counter == 15_750_000) begin
-            sec_clock = ~sec_clock;
-        end
-        if(sec_counter == 31_500_000) begin
+        if (sec_clock) begin
             seconds <= seconds + 1;
-            sec_clock = ~sec_clock;
-            sec_counter <= 0;
         end
-        slow_clk_counter <= slow_clk_counter + 1;
-        if (slow_clk_counter == 157_500) begin
-            slow_clk = ~slow_clk;
-        end
-        if (slow_clk_counter == 315_000) begin
-            slow_clk = ~slow_clk;
-            slow_clk_counter <= 0;
-        end
-        buzzer_clk_counter <= buzzer_clk_counter + 1;
-        if (buzzer_clk_counter == 5000) begin
-            buzzer_clk = ~buzzer_clk;
-        end
-        if (buzzer_clk_counter == 10_000) begin
-            buzzer_clk = ~buzzer_clk;
-            buzzer_clk_counter <= 0;
-        end
-
         // adjustment buttons
         if (sec_adj_input) begin
             seconds <= seconds + 1;
