@@ -369,7 +369,6 @@ reg signed [7:0] cos_val;
 always @(posedge clk or posedge reset) begin
     if (reset) begin
         
-
         sine_table[0] = 8'sd0; cos_table[0] = 8'sd127;
         sine_table[1] = 8'sd2; cos_table[1] = 8'sd127;
         sine_table[2] = 8'sd4; cos_table[2] = 8'sd127;
@@ -477,14 +476,14 @@ always @(posedge clk or posedge reset) begin
         run = 0;
 
     end else begin
-        if (slow_clk && done && !restartInhibit) begin
-            done = 0;
-            restartInhibit = 1;
-            run = 1;
-        end else if (!slow_clk) begin
-            restartInhibit = 0;
-        end
-        if (run) begin
+        // if (slow_clk && done && !restartInhibit) begin
+        //     done = 0;
+        //     restartInhibit = 1;
+        //     run = 1;
+        // end else if (!slow_clk) begin
+        //     restartInhibit = 0;
+        // end
+        // if (run) begin
             case(state) 
                 DRAW_HRS: begin
                     done = 0;
@@ -637,8 +636,8 @@ always @(posedge clk or posedge reset) begin
                 end
                 default: begin
                     state = DRAW_HRS;
-                    done = 1;
-                    run = 0;
+                    //done = 1;
+                    //run = 0;
                 end
             endcase
         end
@@ -650,7 +649,7 @@ always @(posedge clk or posedge reset) begin
         else begin
             pixel_bw_reg <= 1'b0; 
         end
-    end
+    //end
 end
     
 
