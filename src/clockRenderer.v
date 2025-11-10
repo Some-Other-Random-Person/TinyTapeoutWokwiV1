@@ -53,7 +53,7 @@ wire [15:0] cosW;
 reg pixel_bw_reg;
 assign pixel_bw = pixel_bw_reg ? 1'b1 : 1'b0;
 
-cordic_sin_cos cordicModule (.clk(clk), .reset(reset), .start(cordicStart), .i_angle(currAngle), .sine_out(sinW), .cosine_out(cosW), .done(cordDone));
+cordic_sin_cos cordicModule (.clk(clk), .reset(reset), .start(cordicStart), .i_angle(currAngle), .sine_output(sinW), .cosine_output(cosW), .done(cordDone));
 
 /* verilator lint_off WIDTH */
 //clockhand angles

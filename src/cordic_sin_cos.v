@@ -22,8 +22,8 @@ module cordic_sin_cos (
         input start,    
         input wire reset,
         input [15:0] i_angle, 
-        output reg signed [15:0] sine_out, 
-        output reg signed [15:0] cosine_out,  
+        output reg signed [15:0] sine_output, 
+        output reg signed [15:0] cosine_output,  
         output reg done 
 );
 /* verilator lint_off BLKSEQ */
