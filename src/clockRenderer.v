@@ -120,7 +120,7 @@ always @(posedge clk or posedge reset) begin
         refreshCycleRunning <= 1'b0;
         cordicRunning <= 1'b0;
         //cordDone = 1'b0;
-        cordicStart <= 1'b0;
+        cordicStart = 1'b0;
         start = 0;
         done <= 1;
         restartInhibit <= 0;
@@ -164,10 +164,10 @@ always @(posedge clk or posedge reset) begin
                         currAngle = hour_angle;
                         /* verilator lint_on WIDTH */
                         //$display("hrsAng = %f", currAngle);
-                        cordicStart <= 1'b1;
+                        cordicStart = 1'b1;
                         cordicRunning <= 1'b1;
                     end else if (cordicRunning) begin
-                        cordicStart <= 1'b0;
+                        cordicStart = 1'b0;
                         if (cordDone) begin
                             //map_clockhand(sinW, cosW, HOUR_LEN);
                             /* verilator lint_off WIDTH */
@@ -210,10 +210,10 @@ always @(posedge clk or posedge reset) begin
                         currAngle = minute_angle;
                         /* verilator lint_on WIDTH */
                         //$display("minAng = %f", currAngle);
-                        cordicStart <= 1'b1;
+                        cordicStart = 1'b1;
                         cordicRunning <= 1'b1;
                     end else if (cordicRunning) begin
-                        cordicStart <= 1'b0;
+                        cordicStart = 1'b0;
                         if (cordDone) begin
                             //map_clockhand(sinW, cosW, MINUTE_LEN);
                             /* verilator lint_off WIDTH */
@@ -256,10 +256,10 @@ always @(posedge clk or posedge reset) begin
                         currAngle = second_angle;
                         /* verilator lint_on WIDTH */
                         //$display("secAng = %f", currAngle);
-                        cordicStart <= 1'b1;
+                        cordicStart = 1'b1;
                         cordicRunning <= 1'b1;
                     end else if (cordicRunning) begin
-                        cordicStart <= 1'b0;
+                        cordicStart = 1'b0;
                         if (cordDone) begin
                             //map_clockhand(sinW, cosW, SEC_LEN);
                             /* verilator lint_off WIDTH */
@@ -301,10 +301,10 @@ always @(posedge clk or posedge reset) begin
                         currAngle = alarm_angle;
                         /* verilator lint_on WIDTH */
                         //$display("alAng = %f", currAngle);
-                        cordicStart <= 1'b1;
+                        cordicStart = 1'b1;
                         cordicRunning <= 1'b1;
                     end else if (cordicRunning) begin
-                        cordicStart <= 1'b0;
+                        cordicStart = 1'b0;
                         if (cordDone) begin
                             //map_clockhand(sinW, cosW, ALARM_LEN);
                             /* verilator lint_off WIDTH */
