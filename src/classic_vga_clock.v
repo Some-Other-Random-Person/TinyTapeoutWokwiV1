@@ -21,7 +21,7 @@
 //`include "display_vga.v"
 
 module classic_vga_clock (
-    input wire video_clk,           //31.5 MHz
+    input wire clk,           //31.5 MHz
     input wire reset_n,             //Inverted reset line
     input wire hour_in,             //Hour increment button
     input wire min_in,              //Minute increment button 
@@ -81,11 +81,11 @@ wire [3:0] fb_bell_y = v_adj / SCALE;
 /* verilator lint_on WIDTH */
 wire in_display_area = (h_adj < DISP_WIDTH) && (v_adj < DISP_HEIGHT);
 
-button_debounce hrsAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(hour_in), .output_pulse(hrs_adj_input), .reset(reset));
-button_debounce minAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(min_in), .output_pulse(min_adj_input), .reset(reset));
-button_debounce secAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(sec_in), .output_pulse(sec_adj_input), .reset(reset));
-button_debounce alAdj (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(al_in), .output_pulse(al_adj_input), .reset(reset));
-button_debounce alOnOff (.regular_clk(video_clk), .slow_clk(slow_clk), .button_signal(al_on_off_toggle_in), .output_pulse(al_on_off_toggle_line), .reset(reset));
+button_debounce hrsAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(hour_in), .output_pulse(hrs_adj_input), .reset(reset));
+button_debounce minAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(min_in), .output_pulse(min_adj_input), .reset(reset));
+button_debounce secAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(sec_in), .output_pulse(sec_adj_input), .reset(reset));
+button_debounce alAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al_in), .output_pulse(al_adj_input), .reset(reset));
+button_debounce alOnOff (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al_on_off_toggle_in), .output_pulse(al_on_off_toggle_line), .reset(reset));
 
 wire [9:0] x_pix;          // X position for actual pixel.
 wire [9:0] y_pix;          // Y position for actual pixel.
@@ -94,9 +94,9 @@ reg [9:0] x_offs = 25;
 reg [9:0] y_offs = 15;
 //parameter SCALE = 7;
 
-clockRenderer clockfaceRendering (.clk(video_clk), .slow_clk(slow_clk), .reset(reset), .hour(hours), .minute(minutes), .second(seconds), .al_hour(al_hours), .al_minute(al_minutes), .horizCounter(x_pix), .vertCounter(y_pix), .x_offset(x_offs), .y_offset(y_offs), .pixel_bw(drawClockhandPx));
+clockRenderer clockfaceRendering (.clk(clk), .slow_clk(slow_clk), .reset(reset), .hour(hours), .minute(minutes), .second(seconds), .al_hour(al_hours), .al_minute(al_minutes), .horizCounter(x_pix), .vertCounter(y_pix), .x_offset(x_offs), .y_offset(y_offs), .pixel_bw(drawClockhandPx));
 
-display_vga vga_0 (.clk(video_clk), .sys_rst(reset), .hsync(vga_horizSync), .vsync(vga_vertSync), .horizPos(x_pix), .vertPos(y_pix), .active(video_visible_range));
+display_vga vga_0 (.clk(clk), .sys_rst(reset), .hsync(vga_horizSync), .vsync(vga_vertSync), .horizPos(x_pix), .vertPos(y_pix), .active(video_visible_range));
 
 
 initial begin
@@ -118,7 +118,7 @@ initial begin
         bell_symb[15] <= 16'b0000001111000000;
 end
 
-always @(posedge video_clk) begin
+always @(posedge clk) begin
     if(reset) begin
         seconds <= 0;
         minutes <= 0;
