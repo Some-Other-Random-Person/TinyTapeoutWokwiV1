@@ -116,10 +116,6 @@ initial begin
         bell_symb[13] <= 16'b1100000000000011;
         bell_symb[14] <= 16'b1111111111111111;
         bell_symb[15] <= 16'b0000001111000000;
-end
-
-always @(posedge clk) begin
-    if(reset) begin
         seconds <= 0;
         minutes <= 0;
         hours <= 0;
@@ -136,6 +132,11 @@ always @(posedge clk) begin
         //draw = 0;
         al_on <= 0;
         alarm <= 0;
+end
+
+always @(posedge clk) begin
+    if(reset) begin
+        
 
         //init Bell
         
