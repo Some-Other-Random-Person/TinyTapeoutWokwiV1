@@ -148,38 +148,38 @@ always @(posedge clk) begin
 
     end 
 
-    //      else if(seconds >= 60) begin
-    //         seconds <= 0;
-    //         minutes <= minutes + 1;
-    //     end
-    //      else if(minutes >= 60) begin
-    //         minutes <= 0;
-    //         hours <= hours + 1;
-    //     end
-    //     else if(hours >= 12) begin
-    //         hours <= 0;
-    //     end
+         else if(seconds >= 60) begin
+            seconds <= 0;
+            minutes <= minutes + 1;
+        end
+         else if(minutes >= 60) begin
+            minutes <= 0;
+            hours <= hours + 1;
+        end
+        else if(hours >= 12) begin
+            hours <= 0;
+        end
 
-    //     else if(al_minutes >= 60) begin
-    //         al_minutes <= 0;
-    //         al_hours <= al_hours + 1;
-    //     end
-    //     else if(al_hours >= 12) begin
-    //         al_hours <= 0;
-    //     end
-    //     else if (sec_clock) begin
-    //         seconds <= seconds + 1;
-    //     end
-    //     // adjustment buttons
-    //     else if (sec_adj_input) begin
-    //         seconds <= seconds + 1;
-    //     end
-    //     else if (min_adj_input) begin
-    //         minutes <= minutes + 1;
-    //     end
-    //     else if (hrs_adj_input) begin
-    //         hours <= hours + 1;
-    //     end
+        else if(al_minutes >= 60) begin
+            al_minutes <= 0;
+            al_hours <= al_hours + 1;
+        end
+        else if(al_hours >= 12) begin
+            al_hours <= 0;
+        end
+        else if (sec_clock) begin
+            seconds <= seconds + 1;
+        end
+        // // adjustment buttons
+        // else if (sec_adj_input) begin
+        //     seconds <= seconds + 1;
+        // end
+        // else if (min_adj_input) begin
+        //     minutes <= minutes + 1;
+        // end
+        // else if (hrs_adj_input) begin
+        //     hours <= hours + 1;
+        // end
     //     else if (al_adj_input) begin
     //         al_minutes <= al_minutes + 10;
     //     end
