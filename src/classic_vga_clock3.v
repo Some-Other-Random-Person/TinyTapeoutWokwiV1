@@ -1,4 +1,4 @@
-`default_nettype none
+//`default_nettype none
 
 `timescale 1ns / 1ps
 
@@ -45,12 +45,18 @@ wire buzzer_clk;
 wire main_clk_trigg;
 
 //wire slow_clk;
-
 reg [5:0] seconds;
 reg [5:0] minutes;
 reg [3:0] hours;
 reg [5:0] al_minutes;
 reg [3:0] al_hours;
+
+wire minutesW = minutes;
+wire secondsW = seconds;
+wire hoursW = hours;
+wire al_minW = al_minutes;
+wire al_hoursW = al_hours;
+
 // reg [25:0] sec_counter;
 // reg [19:0] slow_clk_counter;
 // reg [13:0] buzzer_clk_counter;

@@ -46,11 +46,18 @@ wire main_clk_trigg;
 
 //wire slow_clk;
 
+//wire slow_clk;
 reg [5:0] seconds;
 reg [5:0] minutes;
 reg [3:0] hours;
 reg [5:0] al_minutes;
 reg [3:0] al_hours;
+
+assign wire minutesW = minutes;
+assign wire secondsW = seconds;
+assign wire hoursW = hours;
+assign wire al_minW = al_minutes;
+assign wire al_hoursW = al_hours;
 // reg [25:0] sec_counter;
 // reg [19:0] slow_clk_counter;
 // reg [13:0] buzzer_clk_counter;
@@ -102,7 +109,7 @@ wire in_display_area = (h_adj < DISP_WIDTH) && (v_adj < DISP_HEIGHT);
 
 
 
-clockRenderer clockfaceRendering (.clk(clk), .slow_clk(slow_clk), .reset(reset), .hour(hours), .minute(minutes), .second(seconds), .al_hour(al_hours), .al_minute(al_minutes), .horizCounter(x_pix), .vertCounter(y_pix), .x_offset(x_offs), .y_offset(y_offs), .pixel_bw(drawClockhandPx));
+clockRenderer clockfaceRendering (.clk(clk), .slow_clk(slow_clk), .reset(reset), .hour(hoursW), .minute(minutesW), .second(secondsW), .al_hour(al_hoursW), .al_minute(al_minW), .horizCounter(x_pix), .vertCounter(y_pix), .x_offset(x_offs), .y_offset(y_offs), .pixel_bw(drawClockhandPx));
 
 display_vga vga_0 (.clk(clk), .sys_rst(reset), .hsync(vga_horizSync), .vsync(vga_vertSync), .horizPos(x_pix), .vertPos(y_pix), .active(video_visible_range));
 /*
