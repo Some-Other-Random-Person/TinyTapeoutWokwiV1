@@ -104,7 +104,9 @@ reg [13:0] shiftedSinTemp;
 
 
 always @(posedge clk or posedge reset) begin
-    
+    if (start) begin
+        start <= 0;
+    end
     if (reset) begin
         
         // Clear framebuffer
@@ -117,11 +119,12 @@ always @(posedge clk or posedge reset) begin
             //$display("%b", framebuffer[i]);
             
         end
+        start = 0;
         refreshCycleRunning = 1'b0;
         cordicRunning = 1'b0;
         //cordDone = 1'b0;
         cordicStart = 1'b0;
-        start = 0;
+        
         done = 1;
         restartInhibit = 0;
         state = DRAW_HRS;
@@ -139,7 +142,7 @@ always @(posedge clk or posedge reset) begin
         end
 
         if (start) begin
-            start = 0;
+            
             done = 0;
             if (!refreshCycleRunning) begin
                 for (i = 0; i < 64; i = i + 1) begin

@@ -99,7 +99,7 @@ always @(posedge clk or posedge reset or posedge start) begin
                     else if (input_angle < -180) begin
                         input_angle = input_angle + 360;
                     end
-                    j = input_angle;
+                    j <= input_angle;
                     //$display ("i_angle2 = %f",j);
                     if (j >= -180 && j <= -91) begin
                         angle = degreeConverter(180 + j);
