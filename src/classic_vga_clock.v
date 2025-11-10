@@ -54,7 +54,7 @@ reg [3:0] al_hours;
 // reg [25:0] sec_counter;
 // reg [19:0] slow_clk_counter;
 // reg [13:0] buzzer_clk_counter;
-reg [15:0] bell_symb [0:15];
+//reg [15:0] bell_symb [0:15];
 
 wire sec_adj_input, min_adj_input, hrs_adj_input, al_adj_input, al_on_off_toggle_line;
 reg al_on, alarm;
@@ -114,6 +114,7 @@ clock_div #(31500000, 31500000)   mainClk (.clk(clk), .reset(reset), .slower_clk
 
 always @(posedge clk) begin
     if(reset) begin
+        /*
         bell_symb[0] <= 16'b0000001111000000;
         bell_symb[1] <= 16'b0000011111100000;
         bell_symb[2] <= 16'b0000110000110000;
@@ -130,6 +131,7 @@ always @(posedge clk) begin
         bell_symb[13] <= 16'b1100000000000011;
         bell_symb[14] <= 16'b1111111111111111;
         bell_symb[15] <= 16'b0000001111000000;
+        */
         seconds <= 0;
         minutes <= 0;
         hours <= 0;
@@ -205,26 +207,7 @@ end
     
 
    
-/*
-localparam [15:0] BELL_SYMB[0:15] = '{
-    16'b0000001111000000,
-    16'b0000011111100000,
-    16'b0000110000110000,
-    16'b0001100000011000,
-    16'b0001100000011000,
-    16'b0001100000011000,
-    16'b0001100000011000,
-    16'b0001000000001000,
-    16'b0001000000001000,
-    16'b0011000000001100,
-    16'b0011000000001100,
-    16'b0110000000000110,
-    16'b1100000000000111,
-    16'b1100000000000011,
-    16'b1111111111111111,
-    16'b0000001111000000
-  };
- */
+
     //wire pixel_on;
 
 
