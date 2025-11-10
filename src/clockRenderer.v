@@ -125,7 +125,7 @@ always @(posedge clk or posedge reset) begin
         done = 1;
         restartInhibit = 0;
         state = DRAW_HRS;
-        pixel_bw_reg = 0;
+        pixel_bw_reg <= 0;
 
     end else begin
         if (!slow_clk) begin
