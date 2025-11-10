@@ -68,7 +68,7 @@ reg bellsig;
 wire bellsigOut;
 assign bellsigOut = alarmSymbDisp && bellsig ? 1'b1 : 1'b0;
 //wire bellsigOut = alarmSymbDisp & bellsig
-wire draw = bellsigOut;
+wire draw = drawClockhandPx;
 
 assign black_white = video_visible_range && draw ? 1'b1 : 1'b0;
 
@@ -102,7 +102,7 @@ wire in_display_area = (h_adj < DISP_WIDTH) && (v_adj < DISP_HEIGHT);
 
 
 
-//clockRenderer clockfaceRendering (.clk(clk), .slow_clk(slow_clk), .reset(reset), .hour(hours), .minute(minutes), .second(seconds), .al_hour(al_hours), .al_minute(al_minutes), .horizCounter(x_pix), .vertCounter(y_pix), .x_offset(x_offs), .y_offset(y_offs), .pixel_bw(drawClockhandPx));
+clockRenderer clockfaceRendering (.clk(clk), .slow_clk(slow_clk), .reset(reset), .hour(hours), .minute(minutes), .second(seconds), .al_hour(al_hours), .al_minute(al_minutes), .horizCounter(x_pix), .vertCounter(y_pix), .x_offset(x_offs), .y_offset(y_offs), .pixel_bw(drawClockhandPx));
 
 display_vga vga_0 (.clk(clk), .sys_rst(reset), .hsync(vga_horizSync), .vsync(vga_vertSync), .horizPos(x_pix), .vertPos(y_pix), .active(video_visible_range));
 /*
