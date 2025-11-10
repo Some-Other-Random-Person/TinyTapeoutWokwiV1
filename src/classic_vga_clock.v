@@ -61,11 +61,12 @@ reg al_on, alarm;
 assign buzzer_out = (alarm && sec_clock) ? buzzer_clk : 1'b0;
 
 wire video_visible_range;  //within drawing range
-;
+
 wire drawClockhandPx;
 wire alarmSymbDisp = al_on;
 reg bellsig;
-assign bellsigOut = alarmSymbDisp && bellsig 1'b1 : 1'b0;
+wire bellsigOut;
+assign bellsigOut = alarmSymbDisp && bellsig ? 1'b1 : 1'b0;
 //wire bellsigOut = alarmSymbDisp & bellsig
 wire draw = drawClockhandPx | bellsigOut;
 
