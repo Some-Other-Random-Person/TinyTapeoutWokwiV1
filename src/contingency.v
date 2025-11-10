@@ -96,8 +96,8 @@ button_debounce alAdj (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al
 button_debounce alOnOff (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(al_on_off_toggle_in), .output_pulse(al_on_off_toggle_line), .reset(reset));
          // Y position for actual pixel.
 
-reg [9:0] x_offs = 25;
-reg [9:0] y_offs = 15;
+reg [9:0] x_offs;
+reg [9:0] y_offs;
 //parameter SCALE = 7;
 
 
@@ -130,7 +130,7 @@ always @(posedge clk) begin
         // bell_symb[13] <= 16'b1100000000000011;
         // bell_symb[14] <= 16'b1111111111111111;
         // bell_symb[15] <= 16'b0000001111000000;
-        
+
         seconds <= 0;
         minutes <= 0;
         hours <= 0;
@@ -141,7 +141,8 @@ always @(posedge clk) begin
         //draw = 0;
         al_on <= 0;
         alarm <= 0;
-
+        x_offs  = 25;
+        y_offs = 15;
         //init Bell
         
 
