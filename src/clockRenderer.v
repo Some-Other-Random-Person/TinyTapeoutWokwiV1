@@ -154,56 +154,60 @@ always @(posedge clk or posedge reset) begin
             end
         end
         
-        // if (refreshCycleRunning) begin
-        //     //$display("test");
-        //     case(state) 
-        //         DRAW_HRS: begin
-        //             if (!cordicRunning) begin
-        //                 //$display("entered");
-        //                 /* verilator lint_off WIDTH */
-        //                 currAngle = hour_angle;
-        //                 /* verilator lint_on WIDTH */
-        //                 //$display("hrsAng = %f", currAngle);
-        //                 cordicStart = 1'b1;
-        //                 cordicRunning = 1'b1;
-        //             end else if (cordicRunning) begin
-        //                 cordicStart = 1'b0;
-        //                 if (cordDone) begin
-        //                     //map_clockhand(sinW, cosW, HOUR_LEN);
-        //                     /* verilator lint_off WIDTH */
-    	//                     signS = sinW >>> 14;
-        //                     signC = cosW >>> 14;
+        if (refreshCycleRunning) begin
+            //$display("test");
+            case(state) 
+                DRAW_HRS: begin
+                    if (!cordicRunning) begin
+                        //$display("entered");
+                        /* verilator lint_off WIDTH */
+                        currAngle = hour_angle;
+                        /* verilator lint_on WIDTH */
+                        //$display("hrsAng = %f", currAngle);
+                        cordicStart = 1'b1;
+                        cordicRunning = 1'b1;
+                    end else if (cordicRunning) begin
+                        cordicStart = 1'b0;
+                        if (cordDone) begin
+                            //map_clockhand(sinW, cosW, HOUR_LEN);
+                            /* verilator lint_off WIDTH */
+    	                    signS = sinW >>> 14;
+                            signC = cosW >>> 14;
 
-        //                     shiftedC = cosW;
-        //                     shiftedS = sinW;
+                            shiftedC = cosW;
+                            shiftedS = sinW;
                             
-        //                     for (j = 1; j <= 23; j = j + 2) begin
-        //                         if (signS == 0) begin
-        //                             scaledSin = ((shiftedS * j) / 16384);
-        //                         end else begin
-        //                             shiftedSinTemp = 16384 - shiftedS;
-        //                             scaledSin = -((shiftedSinTemp * j) / 16384);
-        //                         end
-        //                         if (signC == 0) begin
-        //                             scaledCos = ((shiftedC * j) / 16384);
-        //                         end else begin
-        //                             shiftedCosTemp = 16384 - shiftedC;
-        //                             scaledCos = -((shiftedCosTemp * j) / 16384);
-        //                         end
-        //                         //scaledCos = 0;
-        //                         //scaledSin = 0;
-        //                         row = framebuffer[(63-(32 + scaledCos))];
-        //                         row[(63 - (32 + scaledSin))] = 1'b1;
-        //                         framebuffer[(63-(32 + scaledCos))] = row;
-        //                     end
-        //                     /* verilator lint_on WIDTH */
-        //                     if (j == 23) begin
-        //                         cordicRunning = 1'b0;
-        //                         state = DRAW_MINS;
-        //                     end
-        //                 end
-        //             end
-        //         end
+                            for (j = 1; j <= 23; j = j + 2) begin
+                                if (signS == 0) begin
+                                    scaledSin = ((shiftedS * j) / 16384);
+                                end else begin
+                                    shiftedSinTemp = 16384 - shiftedS;
+                                    scaledSin = -((shiftedSinTemp * j) / 16384);
+                                end
+                                if (signC == 0) begin
+                                    scaledCos = ((shiftedC * j) / 16384);
+                                end else begin
+                                    shiftedCosTemp = 16384 - shiftedC;
+                                    scaledCos = -((shiftedCosTemp * j) / 16384);
+                                end
+                                //scaledCos = 0;
+                                //scaledSin = 0;
+                                row = framebuffer[(63-(32 + scaledCos))];
+                                row[(63 - (32 + scaledSin))] = 1'b1;
+                                framebuffer[(63-(32 + scaledCos))] = row;
+                            end
+                            /* verilator lint_on WIDTH */
+                            if (j == 23) begin
+                                //cordicRunning = 1'b0;
+                                //state = DRAW_MINS;
+                                cordicRunning = 1'b0;
+                                refreshCycleRunning = 1'b0;
+                                done = 1;
+                                state = DRAW_HRS;
+                            end
+                        end
+                    end
+                end
         //         DRAW_MINS: begin
         //             if (!cordicRunning) begin
         //                 /* verilator lint_off WIDTH */
@@ -344,11 +348,11 @@ always @(posedge clk or posedge reset) begin
         //                 end
         //             end
         //         end
-        //         default: begin
-        //             state = DRAW_HRS;
-        //         end
-        //     endcase  
-        // end
+                default: begin
+                    state = DRAW_HRS;
+                end
+            endcase  
+        end
         if (in_display_area && done) begin
             dispRow = framebuffer[fb_y];
             pixel_bw_reg <= dispRow[63-fb_x];

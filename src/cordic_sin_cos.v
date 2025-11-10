@@ -60,117 +60,116 @@ localparam  START = 2'b00, //init
 reg [1:0] quadrant;
 reg [1:0] state;
 
-always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        angle_table[0] <= 16'h3244; // tan^-1 (2^-0)
-        angle_table[1] <= 16'h1DAC; // tan^-1 (2^-1)
-        angle_table[2] <= 16'h0FAE; // tan^-1 (2^-2)
-        angle_table[3] <= 16'h07F5; // tan^-1 (2^-3)
-        angle_table[4] <= 16'h03FF; // tan^-1 (2^-4)
-        angle_table[5] <= 16'h0200; // tan^-1 (2^-5)
-        /* verilator lint_off WIDTH */
-        for (i = 6; i < 16; i = i+1)
-            angle_table[i] <= angle_table[i-1]>>>1; 
-        /* verilator lint_on WIDTH */
-        //$display("Reached");
-    end else begin
-        case(state)
-            START: begin
-                if (start) begin
-                    input_angle = i_angle;
-                    if (input_angle == 360) begin
-                        input_angle = 0;
-                    end
-                    //$display ("i_angle1 = %f",input_angle);
-                    if (input_angle > 180) begin
-                        input_angle = input_angle - 360;
-                    end
-                    else if (input_angle < -180) begin
-                        input_angle = input_angle + 360;
-                    end
-                    j = input_angle;
-                    //$display ("i_angle2 = %f",j);
-                    if (j >= -180 && j <= -91) begin
-                        angle = degreeConverter(180 + j);
-                        quadrant = 2'b10;
-                    end
-                    else if (j >= -90 && j <= -1) begin
-                        angle = degreeConverter(j);
-                        quadrant = 2'b11;
-                    end
-                    else if (j >= 0 && j <= 89) begin
-                        angle = degreeConverter(j);
-                        quadrant =2'b00;
-                    end
-                    else if (j >= 90 && j <= 179) begin
-                        angle = degreeConverter(180 - j);
-                        quadrant = 2'b01;
-                    end 
-                    //$display ("i_angle= %f; angleRAD = %h, %f",input_angle, angle, quadrant);
-                    x = 16'h26DD; //cordic
-                    y = 16'h0000;
-                    z = angle;
-                    iterCount = 0;
-                    done = 0;
-                    state = ITERATING; end end
-                    
-            ITERATING: begin
-                /* verilator lint_off WIDTH */
-                if (z[15]) begin
-                    x_temp = x + (y >>> iterCount);
-                    y_temp = y - (x >>> iterCount);
-                    z_temp = z + angle_table[iterCount];
-                    state = DONE; 
-                end else begin
-                    x_temp = x - (y >>> iterCount);
-                    y_temp = y + (x >>> iterCount);
-                    z_temp = z - angle_table[iterCount]; 
+always @(posedge clk) begin
+    
+    case(state)
+        START: begin
+            if (start) begin
+                input_angle = i_angle;
+                if (input_angle == 360) begin
+                    input_angle = 0;
                 end
-                /* verilator lint_on WIDTH */
-                iterCount = iterCount + 1;
-                state = DONE; 
-            end
+                //$display ("i_angle1 = %f",input_angle);
+                if (input_angle > 180) begin
+                    input_angle = input_angle - 360;
+                end
+                else if (input_angle < -180) begin
+                    input_angle = input_angle + 360;
+                end
+                j = input_angle;
+                //$display ("i_angle2 = %f",j);
+                if (j >= -180 && j <= -91) begin
+                    angle = degreeConverter(180 + j);
+                    quadrant = 2'b10;
+                end
+                else if (j >= -90 && j <= -1) begin
+                    angle = degreeConverter(j);
+                    quadrant = 2'b11;
+                end
+                else if (j >= 0 && j <= 89) begin
+                    angle = degreeConverter(j);
+                    quadrant =2'b00;
+                end
+                else if (j >= 90 && j <= 179) begin
+                    angle = degreeConverter(180 - j);
+                    quadrant = 2'b01;
+                end 
+                //$display ("i_angle= %f; angleRAD = %h, %f",input_angle, angle, quadrant);
+                x = 16'h26DD; //cordic
+                y = 16'h0000;
+                z = angle;
+                iterCount = 0;
+                done = 0;
+                state = ITERATING; end end
                 
-            DONE: begin
-                x = x_temp;
-                y = y_temp;
-                z = z_temp;
-                if (iterCount == I_MAX) begin
-                    cosine = x_temp;
-                    sine = y_temp;
-                    //$display ("sine= %h; cosine= %h",sine, cosine);
-                    if (i_angle == 180) begin
-                        sine_out = 16'h0000;
-                        cosine_out = 16'hC006;
-                    end else begin
-                        if (quadrant == 2'b00) begin
-                            sine_out = sine;
-                            cosine_out = cosine; 
-                        end else if (quadrant == 2'b01) begin
-                            sine_out = sine;
-                            cosine_out = -cosine; 
-                        end else if (quadrant == 2'b10) begin
-                            sine_out = -sine;
-                            cosine_out = -cosine; 
-                        end else begin
-                            sine_out = sine;
-                            cosine_out = cosine; 
-                        end
-                    end
-                    done = 1;
-                    state = START; 
-                end else begin
-                    state = ITERATING; 
-                end
-            end     
-            default: begin
-                state = START; 
+        ITERATING: begin
+            /* verilator lint_off WIDTH */
+            if (z[15]) begin
+                x_temp = x + (y >>> iterCount);
+                y_temp = y - (x >>> iterCount);
+                z_temp = z + angle_table[iterCount];
+                state = DONE; 
+            end else begin
+                x_temp = x - (y >>> iterCount);
+                y_temp = y + (x >>> iterCount);
+                z_temp = z - angle_table[iterCount]; 
             end
-        endcase 
-    end
+            /* verilator lint_on WIDTH */
+            iterCount = iterCount + 1;
+            state = DONE; 
+        end
+            
+        DONE: begin
+            x = x_temp;
+            y = y_temp;
+            z = z_temp;
+            if (iterCount == I_MAX) begin
+                cosine = x_temp;
+                sine = y_temp;
+                //$display ("sine= %h; cosine= %h",sine, cosine);
+                if (i_angle == 180) begin
+                    sine_out = 16'h0000;
+                    cosine_out = 16'hC006;
+                end else begin
+                    if (quadrant == 2'b00) begin
+                        sine_out = sine;
+                        cosine_out = cosine; 
+                    end else if (quadrant == 2'b01) begin
+                        sine_out = sine;
+                        cosine_out = -cosine; 
+                    end else if (quadrant == 2'b10) begin
+                        sine_out = -sine;
+                        cosine_out = -cosine; 
+                    end else begin
+                        sine_out = sine;
+                        cosine_out = cosine; 
+                    end
+                end
+                done = 1;
+                state = START; 
+            end else begin
+                state = ITERATING; 
+            end
+        end     
+        default: begin
+            state = START; 
+        end
+    endcase 
 end
-
-
+//initial angle table
+always @(posedge reset) begin
+    angle_table[0] = 16'h3244; // tan^-1 (2^-0)
+    angle_table[1] = 16'h1DAC; // tan^-1 (2^-1)
+    angle_table[2] = 16'h0FAE; // tan^-1 (2^-2)
+    angle_table[3] = 16'h07F5; // tan^-1 (2^-3)
+    angle_table[4] = 16'h03FF; // tan^-1 (2^-4)
+    angle_table[5] = 16'h0200; // tan^-1 (2^-5)
+    /* verilator lint_off WIDTH */
+    for (i = 6; i < I_MAX; i = i+1)
+        angle_table[i] = angle_table[i-1]>>>1; 
+    /* verilator lint_on WIDTH */
+    //$display("Reached");
+end
 /* verilator lint_off BLKSEQ */   
 
 endmodule
