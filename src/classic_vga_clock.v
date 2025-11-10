@@ -61,9 +61,13 @@ reg al_on, alarm;
 assign buzzer_out = (alarm && sec_clock) ? buzzer_clk : 1'b0;
 
 wire video_visible_range;  //within drawing range
-reg bellsig;
+;
 wire drawClockhandPx;
-wire draw = drawClockhandPx | bellsig;
+wire alarmSymbDisp = al_on;
+reg bellsig;
+assign bellsigOut = alarmSymbDisp && bellsig 1'b1 : 1'b0;
+//wire bellsigOut = alarmSymbDisp & bellsig
+wire draw = drawClockhandPx | bellsigOut;
 
 assign black_white = video_visible_range && draw ? 1'b1 : 1'b0;
 
@@ -94,6 +98,8 @@ button_debounce alOnOff (.regular_clk(clk), .slow_clk(slow_clk), .button_signal(
 reg [9:0] x_offs = 25;
 reg [9:0] y_offs = 15;
 //parameter SCALE = 7;
+
+
 
 clockRenderer clockfaceRendering (.clk(clk), .slow_clk(slow_clk), .reset(reset), .hour(hours), .minute(minutes), .second(seconds), .al_hour(al_hours), .al_minute(al_minutes), .horizCounter(x_pix), .vertCounter(y_pix), .x_offset(x_offs), .y_offset(y_offs), .pixel_bw(drawClockhandPx));
 
@@ -184,12 +190,10 @@ always @(posedge clk) begin
             
     end else if (al_on && hours == al_hours && minutes == al_minutes) begin
             alarm <= 1'b1;
-    end else if (in_display_area && al_on) begin
-            row_bell = bell_symb[fb_bell_y];
-            bellsig = row_bell[15-fb_bell_x];
-            //pixel_bw
     end else begin
-            bellsig = 1'b0; 
+        row_bell = bell_symb[fb_bell_y];
+        bellsig = row_bell[15-fb_bell_x];
+            //pixel_bw
     end
 
 
