@@ -114,22 +114,23 @@ clock_div #(31500000, 31500000)   mainClk (.clk(clk), .reset(reset), .slower_clk
 
 always @(posedge clk) begin
     if(reset) begin
-        bell_symb[0] <= 16'b0000001111000000;
-        bell_symb[1] <= 16'b0000011111100000;
-        bell_symb[2] <= 16'b0000110000110000;
-        bell_symb[3] <= 16'b0001100000011000;
-        bell_symb[4] <= 16'b0001100000011000;
-        bell_symb[5] <= 16'b0001100000011000;
-        bell_symb[6] <= 16'b0001100000011000;
-        bell_symb[7] <= 16'b0001000000001000;
-        bell_symb[8] <= 16'b0001000000001000;
-        bell_symb[9] <= 16'b0011000000001100;
-        bell_symb[10] <= 16'b0011000000001100;
-        bell_symb[11] <= 16'b0110000000000110;
-        bell_symb[12] <= 16'b1100000000000111;
-        bell_symb[13] <= 16'b1100000000000011;
-        bell_symb[14] <= 16'b1111111111111111;
-        bell_symb[15] <= 16'b0000001111000000;
+        // bell_symb[0] <= 16'b0000001111000000;
+        // bell_symb[1] <= 16'b0000011111100000;
+        // bell_symb[2] <= 16'b0000110000110000;
+        // bell_symb[3] <= 16'b0001100000011000;
+        // bell_symb[4] <= 16'b0001100000011000;
+        // bell_symb[5] <= 16'b0001100000011000;
+        // bell_symb[6] <= 16'b0001100000011000;
+        // bell_symb[7] <= 16'b0001000000001000;
+        // bell_symb[8] <= 16'b0001000000001000;
+        // bell_symb[9] <= 16'b0011000000001100;
+        // bell_symb[10] <= 16'b0011000000001100;
+        // bell_symb[11] <= 16'b0110000000000110;
+        // bell_symb[12] <= 16'b1100000000000111;
+        // bell_symb[13] <= 16'b1100000000000011;
+        // bell_symb[14] <= 16'b1111111111111111;
+        // bell_symb[15] <= 16'b0000001111000000;
+        
         seconds <= 0;
         minutes <= 0;
         hours <= 0;
@@ -146,90 +147,61 @@ always @(posedge clk) begin
 
     end 
 
-         else if(seconds >= 60) begin
-            seconds <= 0;
-            minutes <= minutes + 1;
-        end
-         else if(minutes >= 60) begin
-            minutes <= 0;
-            hours <= hours + 1;
-        end
-        else if(hours >= 12) begin
-            hours <= 0;
-        end
+    //      else if(seconds >= 60) begin
+    //         seconds <= 0;
+    //         minutes <= minutes + 1;
+    //     end
+    //      else if(minutes >= 60) begin
+    //         minutes <= 0;
+    //         hours <= hours + 1;
+    //     end
+    //     else if(hours >= 12) begin
+    //         hours <= 0;
+    //     end
 
-        else if(al_minutes >= 60) begin
-            al_minutes <= 0;
-            al_hours <= al_hours + 1;
-        end
-        else if(al_hours >= 12) begin
-            al_hours <= 0;
-        end
-        else if (sec_clock) begin
-            seconds <= seconds + 1;
-        end
-        // adjustment buttons
-        else if (sec_adj_input) begin
-            seconds <= seconds + 1;
-        end
-        else if (min_adj_input) begin
-            minutes <= minutes + 1;
-        end
-        else if (hrs_adj_input) begin
-            hours <= hours + 1;
-        end
-        else if (al_adj_input) begin
-            al_minutes <= al_minutes + 10;
-        end
-     else if (al_on_off_toggle_line && al_on) begin
-        al_on <= 1'b0;
-        alarm <= 1'b0;
+    //     else if(al_minutes >= 60) begin
+    //         al_minutes <= 0;
+    //         al_hours <= al_hours + 1;
+    //     end
+    //     else if(al_hours >= 12) begin
+    //         al_hours <= 0;
+    //     end
+    //     else if (sec_clock) begin
+    //         seconds <= seconds + 1;
+    //     end
+    //     // adjustment buttons
+    //     else if (sec_adj_input) begin
+    //         seconds <= seconds + 1;
+    //     end
+    //     else if (min_adj_input) begin
+    //         minutes <= minutes + 1;
+    //     end
+    //     else if (hrs_adj_input) begin
+    //         hours <= hours + 1;
+    //     end
+    //     else if (al_adj_input) begin
+    //         al_minutes <= al_minutes + 10;
+    //     end
+    //  else if (al_on_off_toggle_line && al_on) begin
+    //     al_on <= 1'b0;
+    //     alarm <= 1'b0;
 
-     end else if (al_on_off_toggle_line && !al_on) begin
+    //  end else if (al_on_off_toggle_line && !al_on) begin
 
-                al_on <= 1'b1;
+    //             al_on <= 1'b1;
             
-    end else if (al_on && hours == al_hours && minutes == al_minutes) begin
-            alarm <= 1'b1;
-    end else begin
-        // pos_x = fb_bell_x;
-        // pos_y = fb_bell_x;
-        // row_bell <= bell_symb[fb_bell_y];
-        bellsig = 1;
-            //pixel_bw
-    end
+    // end else if (al_on && hours == al_hours && minutes == al_minutes) begin
+    //         alarm <= 1'b1;
+    // end else begin
+    //     // pos_x = fb_bell_x;
+    //     // pos_y = fb_bell_x;
+    //     // row_bell <= bell_symb[fb_bell_y];
+    //     bellsig <= 1;
+    //         //pixel_bw
+    // end
 
 
 end
 
-    
-
-   
-/*
-localparam [15:0] BELL_SYMB[0:15] = '{
-    16'b0000001111000000,
-    16'b0000011111100000,
-    16'b0000110000110000,
-    16'b0001100000011000,
-    16'b0001100000011000,
-    16'b0001100000011000,
-    16'b0001100000011000,
-    16'b0001000000001000,
-    16'b0001000000001000,
-    16'b0011000000001100,
-    16'b0011000000001100,
-    16'b0110000000000110,
-    16'b1100000000000111,
-    16'b1100000000000011,
-    16'b1111111111111111,
-    16'b0000001111000000
-  };
- */
-    //wire pixel_on;
-
-
-
-
-/* verilator lint_on BLKSEQ */
 endmodule
 `default_nettype wire
