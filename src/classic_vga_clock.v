@@ -58,7 +58,7 @@ reg [3:0] al_hours;
 
 wire sec_adj_input, min_adj_input, hrs_adj_input, al_adj_input, al_on_off_toggle_line;
 reg al_on, alarm;
-assign buzzer_out = (alarm && sec_clock) ? buzzer_clk : 1'b0;
+assign buzzer_out = (alarm) ? 1'b1 : 1'b0;
 
 wire video_visible_range;  //within drawing range
 
@@ -68,7 +68,7 @@ reg bellsig;
 wire bellsigOut;
 assign bellsigOut = alarmSymbDisp && bellsig ? 1'b1 : 1'b0;
 //wire bellsigOut = alarmSymbDisp & bellsig
-wire draw = drawClockhandPx | bellsigOut;
+wire draw = bellsigOut;
 
 assign black_white = video_visible_range && draw ? 1'b1 : 1'b0;
 
@@ -136,10 +136,10 @@ always @(posedge clk) begin
         hours <= 0;
         al_minutes <= 0;
         al_hours <= 0;
-        bellsig = 0;
+        bellsig = 1;
 
         //draw = 0;
-        al_on <= 0;
+        al_on <= 1;
         alarm <= 0;
         x_offs  = 25;
         y_offs = 15;
