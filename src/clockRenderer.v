@@ -117,30 +117,30 @@ always @(posedge clk or posedge reset) begin
             //$display("%b", framebuffer[i]);
             
         end
-        refreshCycleRunning <= 1'b0;
-        cordicRunning <= 1'b0;
+        refreshCycleRunning = 1'b0;
+        cordicRunning = 1'b0;
         //cordDone = 1'b0;
         cordicStart = 1'b0;
         start = 0;
-        done <= 1;
-        restartInhibit <= 0;
+        done = 1;
+        restartInhibit = 0;
         state = DRAW_HRS;
         pixel_bw_reg <= 0;
 
     end else begin
         if (!slow_clk) begin
-            restartInhibit <= 1'b0;
+            restartInhibit = 1'b0;
             //$display("inhibit deactivated");
         end
         if (slow_clk && done && !restartInhibit) begin
             start = 1'b1;
-            restartInhibit <= 1'b1;
+            restartInhibit = 1'b1;
             //$display("start");
         end
 
         if (start) begin
             start = 0;
-            done <= 0;
+            done = 0;
             if (!refreshCycleRunning) begin
                 for (i = 0; i < 64; i = i + 1) begin
                     /* verilator lint_off WIDTH */
@@ -150,205 +150,205 @@ always @(posedge clk or posedge reset) begin
                     /* verilator lint_on WIDTH */
                     //$display("%b", framebuffer[i]);
                 end
-                refreshCycleRunning <= 1'b1;
+                refreshCycleRunning = 1'b1;
             end
         end
         
-        if (refreshCycleRunning) begin
-            //$display("test");
-            case(state) 
-                DRAW_HRS: begin
-                    if (!cordicRunning) begin
-                        //$display("entered");
-                        /* verilator lint_off WIDTH */
-                        currAngle = hour_angle;
-                        /* verilator lint_on WIDTH */
-                        //$display("hrsAng = %f", currAngle);
-                        cordicStart = 1'b1;
-                        cordicRunning <= 1'b1;
-                    end else if (cordicRunning) begin
-                        cordicStart = 1'b0;
-                        if (cordDone) begin
-                            //map_clockhand(sinW, cosW, HOUR_LEN);
-                            /* verilator lint_off WIDTH */
-    	                    signS = sinW >>> 14;
-                            signC = cosW >>> 14;
+        // if (refreshCycleRunning) begin
+        //     //$display("test");
+        //     case(state) 
+        //         DRAW_HRS: begin
+        //             if (!cordicRunning) begin
+        //                 //$display("entered");
+        //                 /* verilator lint_off WIDTH */
+        //                 currAngle = hour_angle;
+        //                 /* verilator lint_on WIDTH */
+        //                 //$display("hrsAng = %f", currAngle);
+        //                 cordicStart = 1'b1;
+        //                 cordicRunning = 1'b1;
+        //             end else if (cordicRunning) begin
+        //                 cordicStart = 1'b0;
+        //                 if (cordDone) begin
+        //                     //map_clockhand(sinW, cosW, HOUR_LEN);
+        //                     /* verilator lint_off WIDTH */
+    	//                     signS = sinW >>> 14;
+        //                     signC = cosW >>> 14;
 
-                            shiftedC = cosW;
-                            shiftedS = sinW;
+        //                     shiftedC = cosW;
+        //                     shiftedS = sinW;
                             
-                            for (j = 1; j <= 23; j = j + 2) begin
-                                if (signS == 0) begin
-                                    scaledSin = ((shiftedS * j) / 16384);
-                                end else begin
-                                    shiftedSinTemp = 16384 - shiftedS;
-                                    scaledSin = -((shiftedSinTemp * j) / 16384);
-                                end
-                                if (signC == 0) begin
-                                    scaledCos = ((shiftedC * j) / 16384);
-                                end else begin
-                                    shiftedCosTemp = 16384 - shiftedC;
-                                    scaledCos = -((shiftedCosTemp * j) / 16384);
-                                end
-                                //scaledCos = 0;
-                                //scaledSin = 0;
-                                row = framebuffer[(63-(32 + scaledCos))];
-                                row[(63 - (32 + scaledSin))] = 1'b1;
-                                framebuffer[(63-(32 + scaledCos))] = row;
-                            end
-                            /* verilator lint_on WIDTH */
-                            if (j == 23) begin
-                                cordicRunning <= 1'b0;
-                                state = DRAW_MINS;
-                            end
-                        end
-                    end
-                end
-                DRAW_MINS: begin
-                    if (!cordicRunning) begin
-                        /* verilator lint_off WIDTH */
-                        currAngle = minute_angle;
-                        /* verilator lint_on WIDTH */
-                        //$display("minAng = %f", currAngle);
-                        cordicStart = 1'b1;
-                        cordicRunning <= 1'b1;
-                    end else if (cordicRunning) begin
-                        cordicStart = 1'b0;
-                        if (cordDone) begin
-                            //map_clockhand(sinW, cosW, MINUTE_LEN);
-                            /* verilator lint_off WIDTH */
-                            signS = sinW >>> 14;
-                            signC = cosW >>> 14;
+        //                     for (j = 1; j <= 23; j = j + 2) begin
+        //                         if (signS == 0) begin
+        //                             scaledSin = ((shiftedS * j) / 16384);
+        //                         end else begin
+        //                             shiftedSinTemp = 16384 - shiftedS;
+        //                             scaledSin = -((shiftedSinTemp * j) / 16384);
+        //                         end
+        //                         if (signC == 0) begin
+        //                             scaledCos = ((shiftedC * j) / 16384);
+        //                         end else begin
+        //                             shiftedCosTemp = 16384 - shiftedC;
+        //                             scaledCos = -((shiftedCosTemp * j) / 16384);
+        //                         end
+        //                         //scaledCos = 0;
+        //                         //scaledSin = 0;
+        //                         row = framebuffer[(63-(32 + scaledCos))];
+        //                         row[(63 - (32 + scaledSin))] = 1'b1;
+        //                         framebuffer[(63-(32 + scaledCos))] = row;
+        //                     end
+        //                     /* verilator lint_on WIDTH */
+        //                     if (j == 23) begin
+        //                         cordicRunning = 1'b0;
+        //                         state = DRAW_MINS;
+        //                     end
+        //                 end
+        //             end
+        //         end
+        //         DRAW_MINS: begin
+        //             if (!cordicRunning) begin
+        //                 /* verilator lint_off WIDTH */
+        //                 currAngle = minute_angle;
+        //                 /* verilator lint_on WIDTH */
+        //                 //$display("minAng = %f", currAngle);
+        //                 cordicStart = 1'b1;
+        //                 cordicRunning = 1'b1;
+        //             end else if (cordicRunning) begin
+        //                 cordicStart = 1'b0;
+        //                 if (cordDone) begin
+        //                     //map_clockhand(sinW, cosW, MINUTE_LEN);
+        //                     /* verilator lint_off WIDTH */
+        //                     signS = sinW >>> 14;
+        //                     signC = cosW >>> 14;
 
-                            shiftedC = cosW;
-                            shiftedS = sinW;
-                            //j =1;
-                            for (k = 1; k <= 31; k = k + 2) begin
-                                if (signS == 0) begin
-                                    scaledSin = ((shiftedS * k) / 16384);
-                                end else begin
-                                    shiftedSinTemp = 16384 - shiftedS;
-                                    scaledSin = -((shiftedSinTemp * k) / 16384);
-                                end
-                                if (signC == 0) begin
-                                    scaledCos = ((shiftedC * k) / 16384);
-                                end else begin
-                                    shiftedCosTemp = 16384 - shiftedC;
-                                    scaledCos = -((shiftedCosTemp * k) / 16384);
-                                end
-                                //scaledCos = 0;
-                                //scaledSin = 0;
-                                row = framebuffer[(63-(32 + scaledCos))];
-                                row[(63 - (32 + scaledSin))] = 1'b1;
-                                framebuffer[(63-(32 + scaledCos))] = row;
-                            end
-                            /* verilator lint_on WIDTH */
-                            if (k == 31) begin
-                                cordicRunning <= 1'b0;
-                                state = DRAW_SECS;
-                            end
-                        end
-                    end
-                end
-                DRAW_SECS: begin
-                    if (!cordicRunning) begin
-                        /* verilator lint_off WIDTH */
-                        currAngle = second_angle;
-                        /* verilator lint_on WIDTH */
-                        //$display("secAng = %f", currAngle);
-                        cordicStart = 1'b1;
-                        cordicRunning <= 1'b1;
-                    end else if (cordicRunning) begin
-                        cordicStart = 1'b0;
-                        if (cordDone) begin
-                            //map_clockhand(sinW, cosW, SEC_LEN);
-                            /* verilator lint_off WIDTH */
-                            signS = sinW >>> 14;
-                            signC = cosW >>> 14;
+        //                     shiftedC = cosW;
+        //                     shiftedS = sinW;
+        //                     //j =1;
+        //                     for (k = 1; k <= 31; k = k + 2) begin
+        //                         if (signS == 0) begin
+        //                             scaledSin = ((shiftedS * k) / 16384);
+        //                         end else begin
+        //                             shiftedSinTemp = 16384 - shiftedS;
+        //                             scaledSin = -((shiftedSinTemp * k) / 16384);
+        //                         end
+        //                         if (signC == 0) begin
+        //                             scaledCos = ((shiftedC * k) / 16384);
+        //                         end else begin
+        //                             shiftedCosTemp = 16384 - shiftedC;
+        //                             scaledCos = -((shiftedCosTemp * k) / 16384);
+        //                         end
+        //                         //scaledCos = 0;
+        //                         //scaledSin = 0;
+        //                         row = framebuffer[(63-(32 + scaledCos))];
+        //                         row[(63 - (32 + scaledSin))] = 1'b1;
+        //                         framebuffer[(63-(32 + scaledCos))] = row;
+        //                     end
+        //                     /* verilator lint_on WIDTH */
+        //                     if (k == 31) begin
+        //                         cordicRunning = 1'b0;
+        //                         state = DRAW_SECS;
+        //                     end
+        //                 end
+        //             end
+        //         end
+        //         DRAW_SECS: begin
+        //             if (!cordicRunning) begin
+        //                 /* verilator lint_off WIDTH */
+        //                 currAngle = second_angle;
+        //                 /* verilator lint_on WIDTH */
+        //                 //$display("secAng = %f", currAngle);
+        //                 cordicStart = 1'b1;
+        //                 cordicRunning = 1'b1;
+        //             end else if (cordicRunning) begin
+        //                 cordicStart = 1'b0;
+        //                 if (cordDone) begin
+        //                     //map_clockhand(sinW, cosW, SEC_LEN);
+        //                     /* verilator lint_off WIDTH */
+        //                     signS = sinW >>> 14;
+        //                     signC = cosW >>> 14;
 
-                            shiftedC = cosW;
-                            shiftedS = sinW;
+        //                     shiftedC = cosW;
+        //                     shiftedS = sinW;
                             
-                            for (l = 1; l <= 27; l = l + 2) begin
-                                if (signS == 0) begin
-                                    scaledSin = ((shiftedS * l) / 16384);
-                                end else begin
-                                    shiftedSinTemp = 16384 - shiftedS;
-                                    scaledSin = -((shiftedSinTemp * l) / 16384);
-                                end
-                                if (signC == 0) begin
-                                    scaledCos = ((shiftedC * l) / 16384);
-                                end else begin
-                                    shiftedCosTemp = 16384 - shiftedC;
-                                    scaledCos = -((shiftedCosTemp * l) / 16384);
-                                end
+        //                     for (l = 1; l <= 27; l = l + 2) begin
+        //                         if (signS == 0) begin
+        //                             scaledSin = ((shiftedS * l) / 16384);
+        //                         end else begin
+        //                             shiftedSinTemp = 16384 - shiftedS;
+        //                             scaledSin = -((shiftedSinTemp * l) / 16384);
+        //                         end
+        //                         if (signC == 0) begin
+        //                             scaledCos = ((shiftedC * l) / 16384);
+        //                         end else begin
+        //                             shiftedCosTemp = 16384 - shiftedC;
+        //                             scaledCos = -((shiftedCosTemp * l) / 16384);
+        //                         end
 
-                                row = framebuffer[(63-(32 + scaledCos))];
-                                row[(63 - (32 + scaledSin))] = 1'b1;
-                                framebuffer[(63-(32 + scaledCos))] = row;
-                            end
-                            /* verilator lint_on WIDTH */
-                            if (l == 27) begin
-                                cordicRunning <= 1'b0;
-                                state = DRAW_ALARM;
-                            end
-                        end
-                    end
-                end
-                DRAW_ALARM: begin
-                    if (!cordicRunning) begin
-                        /* verilator lint_off WIDTH */
-                        currAngle = alarm_angle;
-                        /* verilator lint_on WIDTH */
-                        //$display("alAng = %f", currAngle);
-                        cordicStart = 1'b1;
-                        cordicRunning <= 1'b1;
-                    end else if (cordicRunning) begin
-                        cordicStart = 1'b0;
-                        if (cordDone) begin
-                            //map_clockhand(sinW, cosW, ALARM_LEN);
-                            /* verilator lint_off WIDTH */
-                            signS = sinW >>> 14;
-                            signC = cosW >>> 14;
+        //                         row = framebuffer[(63-(32 + scaledCos))];
+        //                         row[(63 - (32 + scaledSin))] = 1'b1;
+        //                         framebuffer[(63-(32 + scaledCos))] = row;
+        //                     end
+        //                     /* verilator lint_on WIDTH */
+        //                     if (l == 27) begin
+        //                         cordicRunning = 1'b0;
+        //                         state = DRAW_ALARM;
+        //                     end
+        //                 end
+        //             end
+        //         end
+        //         DRAW_ALARM: begin
+        //             if (!cordicRunning) begin
+        //                 /* verilator lint_off WIDTH */
+        //                 currAngle = alarm_angle;
+        //                 /* verilator lint_on WIDTH */
+        //                 //$display("alAng = %f", currAngle);
+        //                 cordicStart = 1'b1;
+        //                 cordicRunning = 1'b1;
+        //             end else if (cordicRunning) begin
+        //                 cordicStart = 1'b0;
+        //                 if (cordDone) begin
+        //                     //map_clockhand(sinW, cosW, ALARM_LEN);
+        //                     /* verilator lint_off WIDTH */
+        //                     signS = sinW >>> 14;
+        //                     signC = cosW >>> 14;
 
-                            shiftedC = cosW;
-                            shiftedS = sinW;
+        //                     shiftedC = cosW;
+        //                     shiftedS = sinW;
                             
-                            for (m = 1; m <= 17; m = m + 2) begin
-                                if (signS == 0) begin
-                                    scaledSin = ((shiftedS * m) / 16384);
-                                end else begin
-                                    shiftedSinTemp = 16384 - shiftedS;
-                                    scaledSin = -((shiftedSinTemp * m) / 16384);
-                                end
-                                if (signC == 0) begin
-                                    scaledCos = ((shiftedC * m) / 16384);
-                                end else begin
-                                    shiftedCosTemp = 16384 - shiftedC;
-                                    scaledCos = -((shiftedCosTemp * m) / 16384);
-                                end
+        //                     for (m = 1; m <= 17; m = m + 2) begin
+        //                         if (signS == 0) begin
+        //                             scaledSin = ((shiftedS * m) / 16384);
+        //                         end else begin
+        //                             shiftedSinTemp = 16384 - shiftedS;
+        //                             scaledSin = -((shiftedSinTemp * m) / 16384);
+        //                         end
+        //                         if (signC == 0) begin
+        //                             scaledCos = ((shiftedC * m) / 16384);
+        //                         end else begin
+        //                             shiftedCosTemp = 16384 - shiftedC;
+        //                             scaledCos = -((shiftedCosTemp * m) / 16384);
+        //                         end
 
-                                row = framebuffer[(63-(32 + scaledCos))];
-                                row[(63 - (32 + scaledSin))] = 1'b1;
-                                framebuffer[(63-(32 + scaledCos))] = row;
-                            end
-                            /* verilator lint_on WIDTH */
-                            if (m == 17) begin
-                                cordicRunning <= 1'b0;
-                                refreshCycleRunning <= 1'b0;
-                                done <= 1;
-                                state = DRAW_HRS;
-                                //$display("Done!");
-                            end
+        //                         row = framebuffer[(63-(32 + scaledCos))];
+        //                         row[(63 - (32 + scaledSin))] = 1'b1;
+        //                         framebuffer[(63-(32 + scaledCos))] = row;
+        //                     end
+        //                     /* verilator lint_on WIDTH */
+        //                     if (m == 17) begin
+        //                         cordicRunning = 1'b0;
+        //                         refreshCycleRunning = 1'b0;
+        //                         done = 1;
+        //                         state = DRAW_HRS;
+        //                         //$display("Done!");
+        //                     end
                             
-                        end
-                    end
-                end
-                default: begin
-                    state = DRAW_HRS;
-                end
-            endcase  
-        end
+        //                 end
+        //             end
+        //         end
+        //         default: begin
+        //             state = DRAW_HRS;
+        //         end
+        //     endcase  
+        // end
         if (in_display_area && done) begin
             dispRow = framebuffer[fb_y];
             pixel_bw_reg <= dispRow[63-fb_x];
