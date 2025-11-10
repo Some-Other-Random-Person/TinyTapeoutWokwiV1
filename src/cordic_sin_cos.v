@@ -19,7 +19,7 @@
 
 module cordic_sin_cos (
         input clk,  
-        input start,    
+        input wire start,    
         input wire reset,
         input [15:0] i_angle, 
         output reg signed [15:0] sine_output, 
@@ -64,18 +64,7 @@ reg [1:0] state;
 reg on;
 
 always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        angle_table[0] = 16'h3244; // tan^-1 (2^-0)
-        angle_table[1] = 16'h1DAC; // tan^-1 (2^-1)
-        angle_table[2] = 16'h0FAE; // tan^-1 (2^-2)
-        angle_table[3] = 16'h07F5; // tan^-1 (2^-3)
-        angle_table[4] = 16'h03FF; // tan^-1 (2^-4)
-        angle_table[5] = 16'h0200; // tan^-1 (2^-5)
-        /* verilator lint_off WIDTH */
-        for (i = 6; i < I_MAX; i = i+1)
-            angle_table[i] = angle_table[i-1]>>>1; 
-        /* verilator lint_on WIDTH */
-        //$display("Reached");
+    if (reset) begin      
         on <= 0;
     end else begin
         if (done) begin
@@ -88,6 +77,17 @@ always @(posedge clk or posedge reset) begin
         case(state)
             START: begin
                 if (on) begin
+                    angle_table[0] = 16'h3244; // tan^-1 (2^-0)
+                    angle_table[1] = 16'h1DAC; // tan^-1 (2^-1)
+                    angle_table[2] = 16'h0FAE; // tan^-1 (2^-2)
+                    angle_table[3] = 16'h07F5; // tan^-1 (2^-3)
+                    angle_table[4] = 16'h03FF; // tan^-1 (2^-4)
+                    angle_table[5] = 16'h0200; // tan^-1 (2^-5)
+                    /* verilator lint_off WIDTH */
+                    for (i = 6; i < I_MAX; i = i+1)
+                        angle_table[i] = angle_table[i-1]>>>1; 
+                    /* verilator lint_on WIDTH */
+                    //$display("Reached");
                     input_angle = i_angle;
                     if (input_angle == 360) begin
                         input_angle = 0;
