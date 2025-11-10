@@ -107,6 +107,22 @@ clock_div #(31500000, 31500000)   mainClk (.clk(clk), .reset(reset), .slower_clk
 
 always @(posedge clk) begin
     if(reset) begin
+        
+        seconds <= 0;
+        minutes <= 0;
+        hours <= 0;
+        al_minutes <= 0;
+        al_hours <= 0;
+        bellsig = 0;
+
+        //draw = 0;
+        al_on <= 0;
+        alarm <= 0;
+
+        //init Bell
+        
+
+    end else if (main_clk_trigg) begin
         bell_symb[0] <= 16'b0000001111000000;
         bell_symb[1] <= 16'b0000011111100000;
         bell_symb[2] <= 16'b0000110000110000;
@@ -123,22 +139,6 @@ always @(posedge clk) begin
         bell_symb[13] <= 16'b1100000000000011;
         bell_symb[14] <= 16'b1111111111111111;
         bell_symb[15] <= 16'b0000001111000000;
-        seconds <= 0;
-        minutes <= 0;
-        hours <= 0;
-        al_minutes <= 0;
-        al_hours <= 0;
-        bellsig = 0;
-
-        //draw = 0;
-        al_on <= 0;
-        alarm <= 0;
-
-        //init Bell
-        
-
-    end else if (main_clk_trigg) begin
-
         if(seconds >= 60) begin
             seconds <= 0;
             minutes <= minutes + 1;
