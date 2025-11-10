@@ -63,7 +63,7 @@ reg on;
 
 always @(posedge clk) begin
     if (start) begin
-        on = 1;
+        on <= 1;
     end
     case(state)
         START: begin
@@ -149,7 +149,7 @@ always @(posedge clk) begin
                     end
                 end
                 done = 1;
-                on = 0;
+                on <= 0;
                 state = START; 
             end else begin
                 state = ITERATING; 
