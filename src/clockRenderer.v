@@ -40,7 +40,7 @@ reg [63:0] row;
 reg cordicStart;
 reg cordicRunning;
 wire cordDone;
-reg [6:0] i, j;
+reg [6:0] i, j, k, l, m;
 reg refreshCycleRunning;
 reg done;
 reg start;
@@ -68,64 +68,44 @@ localparam  DRAW_HRS = 2'b00,
             DRAW_ALARM = 2'b11;
 
 //lengths of clockhands
-parameter MINUTE_LEN = 31;
-parameter HOUR_LEN = 22;
-parameter SEC_LEN = 27;
-parameter ALARM_LEN = 17;
+// parameter MINUTE_LEN = 31;
+// parameter HOUR_LEN = 22;
+// parameter SEC_LEN = 27;
+// parameter ALARM_LEN = 17;
 
-task map_clockhand;
-    input signed [15:0] sinT, cosT;
-    input [4:0] scaleFactor;
 
-    parameter CENTER_POS = 32;
+//display parameters
+parameter SCALE = 7;
+localparam DISP_WIDTH  = 64 * SCALE;
+localparam DISP_HEIGHT = 64 * SCALE;
 
-    reg signS;
-    reg signC;
-    reg signed [15:0] scaledCos;
-    reg signed [15:0] scaledSin;
-    reg [13:0] shiftedC;
-    reg [13:0] shiftedS;
-    reg [13:0] shiftedCosTemp;
-    reg [13:0] shiftedSinTemp;
-    
-    begin 
-        //$display("Map");
-        /* verilator lint_off WIDTH */
-        signS = sinT >>> 14;
-        signC = cosT >>> 14;
+/* verilator lint_off WIDTH */
+wire [9:0] h_adj = horizCounter - x_offset;
+wire [9:0] v_adj = vertCounter - y_offset;
 
-        shiftedC = cosT;
-        shiftedS = sinT;
-        
-        for (j = 1; j <= scaleFactor; j = j + 1) begin
-            if (signS == 0) begin
-                scaledSin = ((shiftedS * j) / 16384);
-            end else begin
-                shiftedSinTemp = 16384 - shiftedS;
-                scaledSin = -((shiftedSinTemp * j) / 16384);
-            end
-            if (signC == 0) begin
-                scaledCos = ((shiftedC * j) / 16384);
-            end else begin
-                shiftedCosTemp = 16384 - shiftedC;
-                scaledCos = -((shiftedCosTemp * j) / 16384);
-            end
+wire [5:0] fb_x = h_adj / SCALE;
+wire [5:0] fb_y = v_adj / SCALE;
+/* verilator lint_on WIDTH */
 
-            row = framebuffer[63-(CENTER_POS + scaledCos)];
-            row[63 - (CENTER_POS + scaledSin)] = 1'b1;
-            framebuffer[63-(CENTER_POS + scaledCos)] = row;
-        end
-        /* verilator lint_on WIDTH */
-        cordicRunning = 1'b0;
-    end
-endtask
+wire in_display_area = (h_adj < DISP_WIDTH) && (v_adj < DISP_HEIGHT);
+reg [63:0] dispRow;
+
+reg signS;
+reg signC;
+reg signed [15:0] scaledCos;
+reg signed [15:0] scaledSin;
+reg [13:0] shiftedC;
+reg [13:0] shiftedS;
+reg [13:0] shiftedCosTemp;
+reg [13:0] shiftedSinTemp;
+
 
 always @(posedge clk or posedge reset) begin
     
     if (reset) begin
         
         // Clear framebuffer
-        for (i = 0; i <= 7'd63; i = i + 1) begin
+        for (i = 0; i < 64; i = i + 1) begin
             /* verilator lint_off WIDTH */
             row = framebuffer[i];
             row = 0;
@@ -141,6 +121,7 @@ always @(posedge clk or posedge reset) begin
         start = 0;
         done = 1;
         restartInhibit = 0;
+        state = DRAW_HRS;
 
     end else begin
         if (!slow_clk) begin
@@ -157,7 +138,7 @@ always @(posedge clk or posedge reset) begin
             start = 0;
             done = 0;
             if (!refreshCycleRunning) begin
-                for (i = 0; i <= 7'd63; i = i + 1) begin
+                for (i = 0; i < 64; i = i + 1) begin
                     /* verilator lint_off WIDTH */
                     row = framebuffer[i];
                     row = 0;
@@ -168,6 +149,7 @@ always @(posedge clk or posedge reset) begin
                 refreshCycleRunning = 1'b1;
             end
         end
+        
         if (refreshCycleRunning) begin
             //$display("test");
             case(state) 
@@ -183,9 +165,38 @@ always @(posedge clk or posedge reset) begin
                     end else if (cordicRunning) begin
                         cordicStart = 1'b0;
                         if (cordDone) begin
-                            map_clockhand(sinW, cosW, HOUR_LEN);
+                            //map_clockhand(sinW, cosW, HOUR_LEN);
+                            /* verilator lint_off WIDTH */
+    	                    signS = sinW >>> 14;
+                            signC = cosW >>> 14;
 
-                            state = DRAW_MINS;
+                            shiftedC = cosW;
+                            shiftedS = sinW;
+                            
+                            for (j = 1; j <= 23; j = j + 2) begin
+                                if (signS == 0) begin
+                                    scaledSin = ((shiftedS * j) / 16384);
+                                end else begin
+                                    shiftedSinTemp = 16384 - shiftedS;
+                                    scaledSin = -((shiftedSinTemp * j) / 16384);
+                                end
+                                if (signC == 0) begin
+                                    scaledCos = ((shiftedC * j) / 16384);
+                                end else begin
+                                    shiftedCosTemp = 16384 - shiftedC;
+                                    scaledCos = -((shiftedCosTemp * j) / 16384);
+                                end
+                                //scaledCos = 0;
+                                //scaledSin = 0;
+                                row = framebuffer[(63-(32 + scaledCos))];
+                                row[(63 - (32 + scaledSin))] = 1'b1;
+                                framebuffer[(63-(32 + scaledCos))] = row;
+                            end
+                            /* verilator lint_on WIDTH */
+                            if (j == 23) begin
+                                cordicRunning = 1'b0;
+                                state = DRAW_MINS;
+                            end
                         end
                     end
                 end
@@ -200,9 +211,38 @@ always @(posedge clk or posedge reset) begin
                     end else if (cordicRunning) begin
                         cordicStart = 1'b0;
                         if (cordDone) begin
-                            map_clockhand(sinW, cosW, MINUTE_LEN);
-                            
-                            state = DRAW_SECS;
+                            //map_clockhand(sinW, cosW, MINUTE_LEN);
+                            /* verilator lint_off WIDTH */
+                            signS = sinW >>> 14;
+                            signC = cosW >>> 14;
+
+                            shiftedC = cosW;
+                            shiftedS = sinW;
+                            //j =1;
+                            for (k = 1; k <= 31; k = k + 2) begin
+                                if (signS == 0) begin
+                                    scaledSin = ((shiftedS * k) / 16384);
+                                end else begin
+                                    shiftedSinTemp = 16384 - shiftedS;
+                                    scaledSin = -((shiftedSinTemp * k) / 16384);
+                                end
+                                if (signC == 0) begin
+                                    scaledCos = ((shiftedC * k) / 16384);
+                                end else begin
+                                    shiftedCosTemp = 16384 - shiftedC;
+                                    scaledCos = -((shiftedCosTemp * k) / 16384);
+                                end
+                                //scaledCos = 0;
+                                //scaledSin = 0;
+                                row = framebuffer[(63-(32 + scaledCos))];
+                                row[(63 - (32 + scaledSin))] = 1'b1;
+                                framebuffer[(63-(32 + scaledCos))] = row;
+                            end
+                            /* verilator lint_on WIDTH */
+                            if (k == 31) begin
+                                cordicRunning = 1'b0;
+                                state = DRAW_SECS;
+                            end
                         end
                     end
                 end
@@ -217,9 +257,37 @@ always @(posedge clk or posedge reset) begin
                     end else if (cordicRunning) begin
                         cordicStart = 1'b0;
                         if (cordDone) begin
-                            map_clockhand(sinW, cosW, SEC_LEN);
+                            //map_clockhand(sinW, cosW, SEC_LEN);
+                            /* verilator lint_off WIDTH */
+                            signS = sinW >>> 14;
+                            signC = cosW >>> 14;
+
+                            shiftedC = cosW;
+                            shiftedS = sinW;
                             
-                            state = DRAW_ALARM;
+                            for (l = 1; l <= 27; l = l + 2) begin
+                                if (signS == 0) begin
+                                    scaledSin = ((shiftedS * l) / 16384);
+                                end else begin
+                                    shiftedSinTemp = 16384 - shiftedS;
+                                    scaledSin = -((shiftedSinTemp * l) / 16384);
+                                end
+                                if (signC == 0) begin
+                                    scaledCos = ((shiftedC * l) / 16384);
+                                end else begin
+                                    shiftedCosTemp = 16384 - shiftedC;
+                                    scaledCos = -((shiftedCosTemp * l) / 16384);
+                                end
+
+                                row = framebuffer[(63-(32 + scaledCos))];
+                                row[(63 - (32 + scaledSin))] = 1'b1;
+                                framebuffer[(63-(32 + scaledCos))] = row;
+                            end
+                            /* verilator lint_on WIDTH */
+                            if (l == 27) begin
+                                cordicRunning = 1'b0;
+                                state = DRAW_ALARM;
+                            end
                         end
                     end
                 end
@@ -234,12 +302,40 @@ always @(posedge clk or posedge reset) begin
                     end else if (cordicRunning) begin
                         cordicStart = 1'b0;
                         if (cordDone) begin
-                            map_clockhand(sinW, cosW, ALARM_LEN);
+                            //map_clockhand(sinW, cosW, ALARM_LEN);
+                            /* verilator lint_off WIDTH */
+                            signS = sinW >>> 14;
+                            signC = cosW >>> 14;
+
+                            shiftedC = cosW;
+                            shiftedS = sinW;
                             
-                            refreshCycleRunning = 1'b0;
-                            done = 1;
-                            state = DRAW_HRS;
-                            //$display("Done!");
+                            for (m = 1; m <= 17; m = m + 2) begin
+                                if (signS == 0) begin
+                                    scaledSin = ((shiftedS * m) / 16384);
+                                end else begin
+                                    shiftedSinTemp = 16384 - shiftedS;
+                                    scaledSin = -((shiftedSinTemp * m) / 16384);
+                                end
+                                if (signC == 0) begin
+                                    scaledCos = ((shiftedC * m) / 16384);
+                                end else begin
+                                    shiftedCosTemp = 16384 - shiftedC;
+                                    scaledCos = -((shiftedCosTemp * m) / 16384);
+                                end
+
+                                row = framebuffer[(63-(32 + scaledCos))];
+                                row[(63 - (32 + scaledSin))] = 1'b1;
+                                framebuffer[(63-(32 + scaledCos))] = row;
+                            end
+                            /* verilator lint_on WIDTH */
+                            if (m == 17) begin
+                                cordicRunning = 1'b0;
+                                refreshCycleRunning = 1'b0;
+                                done = 1;
+                                state = DRAW_HRS;
+                                //$display("Done!");
+                            end
                             
                         end
                     end
@@ -247,36 +343,19 @@ always @(posedge clk or posedge reset) begin
                 default: begin
                     state = DRAW_HRS;
                 end
-            endcase
+            endcase  
+        end
+        if (in_display_area && done) begin
+            dispRow = framebuffer[fb_y];
+            pixel_bw <= dispRow[63-fb_x];
+            //$display("drawing");
+        end
+        else begin
+            pixel_bw <= 1'b0; 
         end
     end
 end
     
-//display parameters
-parameter SCALE = 7;
-localparam DISP_WIDTH  = 64 * SCALE;
-localparam DISP_HEIGHT = 64 * SCALE;
 
-/* verilator lint_off WIDTH */
-wire [9:0] h_adj = horizCounter - x_offset;
-wire [9:0] v_adj = vertCounter - y_offset;
-
-wire [5:0] fb_x = h_adj / SCALE;
-wire [5:0] fb_y = v_adj / SCALE;
-/* verilator lint_on WIDTH */
-
-wire in_display_area = (h_adj < DISP_WIDTH) && (v_adj < DISP_HEIGHT);
-
-always @(posedge clk) begin
-    
-    if (in_display_area && done) begin
-        row = framebuffer[fb_y];
-        pixel_bw <= row[63-fb_x];
-        //$display("drawing");
-    end
-    else begin
-        pixel_bw <= 1'b0; 
-    end
-end
 /* verilator lint_on BLKSEQ */
 endmodule

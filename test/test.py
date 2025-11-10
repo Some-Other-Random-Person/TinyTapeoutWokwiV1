@@ -25,13 +25,13 @@ async def test_project(dut):
     await ClockCycles(dut.clk, 10)
 
     dut._log.info("Check VGA sync pulse is present")
-
+    compVal = True
     sync_pulse_observed = False
     cycles_to_check = 50_000 
     for i in range(0, cycles_to_check, 20):
         await ClockCycles(dut.clk, 20)
         val = dut.uo_out.value[7]
-        if ((val & 0b1) != 0):
+        if ((val and compVal) != 0):
             sync_pulse_observed = True
             dut._log.info(f"H-sync observed!")
 
