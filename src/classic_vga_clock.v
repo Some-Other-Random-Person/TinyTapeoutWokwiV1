@@ -107,81 +107,7 @@ clock_div #(31500000, 31500000)   mainClk (.clk(clk), .reset(reset), .slower_clk
 
 always @(posedge clk) begin
     if(reset) begin
-        
-        seconds <= 0;
-        minutes <= 0;
-        hours <= 0;
-        al_minutes <= 0;
-        al_hours <= 0;
-        bellsig = 0;
-
-        //draw = 0;
-        al_on <= 0;
-        alarm <= 0;
-
-        //init Bell
-        
-
-    end else if (main_clk_trigg) begin
-        
-        if(seconds >= 60) begin
-            seconds <= 0;
-            minutes <= minutes + 1;
-        end
-        if(minutes >= 60) begin
-            minutes <= 0;
-            hours <= hours + 1;
-        end
-        if(hours >= 12) begin
-            hours <= 0;
-        end
-
-        if(al_minutes >= 60) begin
-            al_minutes <= 0;
-            al_hours <= al_hours + 1;
-        end
-        if(al_hours >= 12) begin
-            al_hours <= 0;
-        end
-        if (sec_clock) begin
-            seconds <= seconds + 1;
-        end
-        // adjustment buttons
-        if (sec_adj_input) begin
-            seconds <= seconds + 1;
-        end
-        if (min_adj_input) begin
-            minutes <= minutes + 1;
-        end
-        if (hrs_adj_input) begin
-            hours <= hours + 1;
-        end
-        if (al_adj_input) begin
-            al_minutes <= al_minutes + 10;
-        end
-
-        if (al_on_off_toggle_line) begin
-            if (al_on) begin
-                al_on <= 1'b0;
-                alarm <= 1'b0;
-            end else begin
-                al_on <= 1'b1;
-            end
-        end
-
-        if (al_on && hours == al_hours && minutes == al_minutes) begin
-            alarm <= 1'b1;
-        end
-        /*
-        if (alarm && sec_clock) begin
-            buzzer_out = buzzer_clk;
-        end
-        else begin
-            buzzer_out = 0;
-        end
-        */
-        if (in_display_area && al_on) begin
-            bell_symb[0] <= 16'b0000001111000000;
+        bell_symb[0] <= 16'b0000001111000000;
         bell_symb[1] <= 16'b0000011111100000;
         bell_symb[2] <= 16'b0000110000110000;
         bell_symb[3] <= 16'b0001100000011000;
@@ -197,13 +123,75 @@ always @(posedge clk) begin
         bell_symb[13] <= 16'b1100000000000011;
         bell_symb[14] <= 16'b1111111111111111;
         bell_symb[15] <= 16'b0000001111000000;
+        seconds <= 0;
+        minutes <= 0;
+        hours <= 0;
+        al_minutes <= 0;
+        al_hours <= 0;
+        bellsig = 0;
+
+        //draw = 0;
+        al_on <= 0;
+        alarm <= 0;
+
+        //init Bell
+        
+
+    end 
+
+         else if(seconds >= 60) begin
+            seconds <= 0;
+            minutes <= minutes + 1;
+        end
+         else if(minutes >= 60) begin
+            minutes <= 0;
+            hours <= hours + 1;
+        end
+        else if(hours >= 12) begin
+            hours <= 0;
+        end
+
+        else if(al_minutes >= 60) begin
+            al_minutes <= 0;
+            al_hours <= al_hours + 1;
+        end
+        else if(al_hours >= 12) begin
+            al_hours <= 0;
+        end
+        else if (sec_clock) begin
+            seconds <= seconds + 1;
+        end
+        // adjustment buttons
+        else if (sec_adj_input) begin
+            seconds <= seconds + 1;
+        end
+        else if (min_adj_input) begin
+            minutes <= minutes + 1;
+        end
+        else if (hrs_adj_input) begin
+            hours <= hours + 1;
+        end
+        else if (al_adj_input) begin
+            al_minutes <= al_minutes + 10;
+        end
+     else if (al_on_off_toggle_line && al_on) begin
+        al_on <= 1'b0;
+        alarm <= 1'b0;
+
+     end else if (al_on_off_toggle_line && !al_on) begin
+
+                al_on <= 1'b1;
+            
+    end else if (al_on && hours == al_hours && minutes == al_minutes) begin
+            alarm <= 1'b1;
+    end else if (in_display_area && al_on) begin
             row_bell = bell_symb[fb_bell_y];
             bellsig = row_bell[15-fb_bell_x];
             //pixel_bw
-        end else begin
+    end else begin
             bellsig = 1'b0; 
-        end
     end
+
 
 end
 
