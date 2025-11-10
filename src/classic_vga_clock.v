@@ -123,22 +123,7 @@ always @(posedge clk) begin
         
 
     end else if (main_clk_trigg) begin
-        bell_symb[0] <= 16'b0000001111000000;
-        bell_symb[1] <= 16'b0000011111100000;
-        bell_symb[2] <= 16'b0000110000110000;
-        bell_symb[3] <= 16'b0001100000011000;
-        bell_symb[4] <= 16'b0001100000011000;
-        bell_symb[5] <= 16'b0001100000011000;
-        bell_symb[6] <= 16'b0001100000011000;
-        bell_symb[7] <= 16'b0001000000001000;
-        bell_symb[8] <= 16'b0001000000001000;
-        bell_symb[9] <= 16'b0011000000001100;
-        bell_symb[10] <= 16'b0011000000001100;
-        bell_symb[11] <= 16'b0110000000000110;
-        bell_symb[12] <= 16'b1100000000000111;
-        bell_symb[13] <= 16'b1100000000000011;
-        bell_symb[14] <= 16'b1111111111111111;
-        bell_symb[15] <= 16'b0000001111000000;
+        
         if(seconds >= 60) begin
             seconds <= 0;
             minutes <= minutes + 1;
@@ -196,6 +181,22 @@ always @(posedge clk) begin
         end
         */
         if (in_display_area && al_on) begin
+            bell_symb[0] <= 16'b0000001111000000;
+        bell_symb[1] <= 16'b0000011111100000;
+        bell_symb[2] <= 16'b0000110000110000;
+        bell_symb[3] <= 16'b0001100000011000;
+        bell_symb[4] <= 16'b0001100000011000;
+        bell_symb[5] <= 16'b0001100000011000;
+        bell_symb[6] <= 16'b0001100000011000;
+        bell_symb[7] <= 16'b0001000000001000;
+        bell_symb[8] <= 16'b0001000000001000;
+        bell_symb[9] <= 16'b0011000000001100;
+        bell_symb[10] <= 16'b0011000000001100;
+        bell_symb[11] <= 16'b0110000000000110;
+        bell_symb[12] <= 16'b1100000000000111;
+        bell_symb[13] <= 16'b1100000000000011;
+        bell_symb[14] <= 16'b1111111111111111;
+        bell_symb[15] <= 16'b0000001111000000;
             row_bell = bell_symb[fb_bell_y];
             bellsig = row_bell[15-fb_bell_x];
             //pixel_bw
