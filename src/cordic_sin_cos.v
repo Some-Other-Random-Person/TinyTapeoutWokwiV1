@@ -59,12 +59,15 @@ localparam  START = 2'b00, //init
 
 reg [1:0] quadrant;
 reg [1:0] state;
+reg on;
 
 always @(posedge clk) begin
-    
+    if (start) begin
+        on = 1;
+    end
     case(state)
         START: begin
-            if (start) begin
+            if (on) begin
                 input_angle = i_angle;
                 if (input_angle == 360) begin
                     input_angle = 0;
@@ -146,6 +149,7 @@ always @(posedge clk) begin
                     end
                 end
                 done = 1;
+                on = 0;
                 state = START; 
             end else begin
                 state = ITERATING; 
