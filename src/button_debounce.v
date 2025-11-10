@@ -49,7 +49,7 @@ module button_debounce (
         end
     end
 	 	  
-    always @(*) begin //both edges
+    always @(posedge regular_clk or negedge regular_clk) begin //both edges
         if (deb_sig == 1 && prevState == 0) begin
             output_pulse = 1;  
         end else begin
