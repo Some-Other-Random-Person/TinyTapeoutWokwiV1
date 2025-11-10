@@ -62,15 +62,15 @@ reg [1:0] state;
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-        angle_table[0] = 16'h3244; // tan^-1 (2^-0)
-        angle_table[1] = 16'h1DAC; // tan^-1 (2^-1)
-        angle_table[2] = 16'h0FAE; // tan^-1 (2^-2)
-        angle_table[3] = 16'h07F5; // tan^-1 (2^-3)
-        angle_table[4] = 16'h03FF; // tan^-1 (2^-4)
-        angle_table[5] = 16'h0200; // tan^-1 (2^-5)
+        angle_table[0] <= 16'h3244; // tan^-1 (2^-0)
+        angle_table[1] <= 16'h1DAC; // tan^-1 (2^-1)
+        angle_table[2] <= 16'h0FAE; // tan^-1 (2^-2)
+        angle_table[3] <= 16'h07F5; // tan^-1 (2^-3)
+        angle_table[4] <= 16'h03FF; // tan^-1 (2^-4)
+        angle_table[5] <= 16'h0200; // tan^-1 (2^-5)
         /* verilator lint_off WIDTH */
-        for (i = 6; i < I_MAX; i = i+1)
-            angle_table[i] = angle_table[i-1]>>>1; 
+        for (i = 6; i < 16; i = i+1)
+            angle_table[i] <= angle_table[i-1]>>>1; 
         /* verilator lint_on WIDTH */
         //$display("Reached");
     end else begin
